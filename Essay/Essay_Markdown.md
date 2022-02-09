@@ -55,7 +55,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 
 ### Our work
 
-![image-20220209230134033](C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220209230134033.png)
+![image-20220209230134033](https://s2.loli.net/2022/02/09/Ee5uXgjFw8dTsro.png)
 
 ## Assumptions and Justifications
 

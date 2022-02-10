@@ -23,7 +23,7 @@ def plot_map(lat,lon,col,mksz,figname):
 
 
 
-def Clustering(lat,lon,figname):
+def Clustering(lat,lon,sparse_or_dense,figname):
     import numpy as np
 
     from sklearn.cluster import DBSCAN
@@ -37,7 +37,7 @@ def Clustering(lat,lon,figname):
 
     # #############################################################################
     # Compute DBSCAN
-    db = DBSCAN(eps=0.1, min_samples=20,algorithm='ball_tree', metric='haversine').fit(X)
+    db = DBSCAN(eps=0.15, min_samples=8,algorithm='ball_tree', metric='haversine').fit(X)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
@@ -68,8 +68,8 @@ def Clustering(lat,lon,figname):
         class_member_mask = labels == k
 
         xy = X[class_member_mask & core_samples_mask]
-        
-        plot_map(xy[:,0],xy[:,1],col,3,"map_dense")
+        if sparse_or_dense=="dense":
+            plot_map(xy[:,0],xy[:,1],col,3,figname)
         # plt.plot(
         #     xy[:, 0],
         #     xy[:, 1],
@@ -79,6 +79,8 @@ def Clustering(lat,lon,figname):
         # )
 
         xy = X[class_member_mask & ~core_samples_mask]
+        if sparse_or_dense=="sparse":
+            plot_map(xy[:,0],xy[:,1],col,3,figname)
         # plt.plot(
         #     xy[:, 0],
         #     xy[:, 1],
@@ -91,34 +93,8 @@ def Clustering(lat,lon,figname):
     # plt.savefig(figname)
 
 
-def Dense_Cluster(lat,lon,figname):
-    import numpy as np
 
-    from sklearn.cluster import DBSCAN
-    from sklearn import metrics
-    from sklearn.datasets import make_blobs
-    from sklearn.preprocessing import StandardScaler
-
-    X= [xy for xy in zip(lat,lon)] 
-    scal=StandardScaler()
-    X = scal.fit_transform(X)
-
-    # #############################################################################
-    # Compute DBSCAN
-    db = DBSCAN(eps=0.3, min_samples=10).fit(X)
-    core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-    core_samples_mask[db.core_sample_indices_] = True
-    labels = db.labels_
-
-    unique_labels = set(labels)
-
-    # for k in unique_labels:
-    #     xy=X[labels==k]
-
-    return 
 import pandas as pd
-df=pd.read_csv("Dense_Cluster/initial.csv")
-# print(df["latitude"].tolist(),df["longitude"].tolist())
-Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"temp.png")
+df=pd.read_csv("Dense_Cluster/ini_filt1.csv")
 
-# Dense_Cluster(df["latitude"].tolist(),df["longitude"].tolist(),"dense_cluster.png")
+Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense","dense_cluster.png")

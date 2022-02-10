@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 import numpy as np
-import tqdm
+from tqdm import tqdm
 import cv2
 import torchvision.transforms as trans
 
@@ -190,14 +190,54 @@ class ConvLSTM(nn.Module):
 
 
 
+
+
 fireconvlstm=ConvLSTM(input_dim=3,
-                      hidden_dim=[64, 64, 128],
+                      hidden_dim=[8,8,3],
                       kernel_size=(3,3),
-                      num_layers=3).cuda()
-print(fireconvlstm)
-optimizer=torch.optim.Adam(fireconvlstm.parameters(),lr=0.0001)
-print(optimizer)
+                      num_layers=3,).cuda()
+
+
+
+optimizer=torch.optim.Adam(fireconvlstm.parameters(),lr=0.01)
+LOSS=nn.MSELoss()
+
+
 img=cv2.imread('J:/2021_MM/Data/modis/Pic_20/modis_2003_1_Australia.png')
 transf=trans.ToTensor()
-img_tensor=transf(img)
-print(img_tensor)
+
+img_tensor=transf(img[27:301,76:521]).view(1,3,274,-1).cuda()
+
+
+years=2003
+for months in tqdm(range(2,13)):
+    img=cv2.imread('J:/2021_MM/Data/modis/Pic_20/modis_'+str(years)+'_'+str(months)+'_Australia.png')
+    img_tensor=torch.cat([img_tensor,transf(img[27:301,76:521]).view(1,3,274,-1).cuda()])
+for years in tqdm(range(2004,2021)):
+    for months in range(1,13):
+        img=cv2.imread('J:/2021_MM/Data/modis/Pic_20/modis_'+str(years)+'_'+str(months)+'_Australia.png')
+        img_tensor=torch.cat([img_tensor,transf(img[27:301,76:521]).view(1,3,274,-1).cuda()])
+epochs=200
+
+for i in tqdm(range(epochs)):
+    for j in range(204):
+        optimizer.zero_grad()
+        output=fireconvlstm(img_tensor[j:j+12].view(1,12,3,274,-1))[0]
+        loss=LOSS(output[0][-1][-1],img_tensor[j+12])
+        loss.backward()
+        optimizer.step()
+    if i%20==1:
+        torch.save(fireconvlstm, f'ConvLSTM_model_{i}steps.pth') 
+
+'''for i in tqdm(range(epochs)):
+
+    optimizer.zero_grad()
+
+    output=fireconvlstm(img_tensor)[0]
+
+    loss=LOSS(output[0][-1][-1],img_tensor[j+12])
+    loss.backward()
+    optimizer.step()
+    if i%20==1:
+        torch.save(j, f'ConvLSTM_model_{i}steps.pth') 
+'''

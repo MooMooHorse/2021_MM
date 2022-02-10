@@ -1,6 +1,9 @@
 
 
-def plot_map(lat,lon,col,mksz,figname):
+from turtle import color
+
+
+def plot_map(lat,lon,col,mksz,rangesize,figname="temp.png"):
     from mpl_toolkits.basemap import Basemap
     import matplotlib.pyplot as plt
 
@@ -14,12 +17,14 @@ def plot_map(lat,lon,col,mksz,figname):
     
     x,y = m(lon,lat)
     m.plot(x,y,'o',c=tuple(col),markersize=mksz,alpha=.5)
+    m.plot(x,y,'o',c=tuple(col),markersize=rangesize,alpha=.2)
 
     # # x,y = m(lon2,lat2)
     # # m.plot(x,y,'go',markersize=4,alpha=.5)
 
     plt.title('Geo Plotting')
     plt.savefig(figname)
+    # plt.show()
 
 
 
@@ -94,7 +99,44 @@ def Clustering(lat,lon,sparse_or_dense,figname):
 
 
 
+
+
+def K_Mean_Clustering(lat,lon,figname):
+    import numpy as np
+
+    from sklearn.cluster import DBSCAN,k_means
+    from sklearn import metrics
+    from sklearn.datasets import make_blobs
+    from sklearn.preprocessing import StandardScaler
+
+    X= [xy for xy in zip(lat,lon)] 
+
+    db =  k_means(X,n_clusters=10)
+    Center=db[0]
+    labels = db[1]
+
+
+    
+    X=[x[0] for x in Center]
+    Y=[x[1] for x in Center]
+    # print(Y)
+    # print(Center)
+    import matplotlib.pyplot as plt
+    color_size=5
+    colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, color_size)]
+
+
+    plot_map(X,Y,colors[1],3,23,"thermal_drones_deployment.png")
+
+    return X,Y
+
+
 import pandas as pd
 df=pd.read_csv("Dense_Cluster/ini_filt1.csv")
 
-Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense","dense_cluster.png")
+Cen_Lat,Cen_Lon=K_Mean_Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense_cluster.png")
+
+df["latitude"]=pd.Series(Cen_Lat)
+df["longitude"]=pd.Series(Cen_Lon)
+
+df.to_csv("Dense_Cluster/Center_Coord.csv")

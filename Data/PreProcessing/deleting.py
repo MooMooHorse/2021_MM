@@ -1,7 +1,9 @@
 import csv
 from math import sin, cos, sqrt, atan2, radians
+import matplotlib.pyplot as plt
+import numpy as np
 
-f = open("modis_2020_Australia.csv")
+f = open("modis/modis_2020_Australia.csv")
 L = list(csv.reader(f))
 
 R = 6373.0
@@ -9,7 +11,7 @@ west = 140.966
 east = 149.977
 north = -33.98
 south = -39.14
-confidence_require = 70
+confidence_require = 98
 
 #functions
 def cal_dis(latitude1,longitude1,latitude2,longitude2):
@@ -35,15 +37,31 @@ def loc_in(lat,lon):
         return 0;
 
 ##just locate the area between west = 140.966 east = 149.977 north = -33.98 south = -39.14
-result = []
+x = []
+y = []
 for i in range (1,len(L)):
-    if (loc_in(L[i][0],L[i][1]) & (L[i][9] > confidence_require)):
-        result.append(i)
+    if (loc_in(L[i][0],L[i][1]) & (int(L[i][9]) > confidence_require)):
+        x.append(L[i][0])
+        y.append(L[i][1])
 
-#print(len(result))  28056
+#print(result) 
 
+plt.scatter(y,x)
+plt.savefig('initial_image.png')
 
+x.insert(0,'latitude')
+y.insert(0,'longitude')
+temp = [x,y]
+initial = np.array(temp).T.tolist()
 
+#print(len(x))    8353 points at initial
+
+with open('initial.csv', 'w') as file:
+    writer = csv.writer(file)
+    writer.writerows(initial)
+
+#################################################################
+#######    deleting the distributed points     ###############
 
 
 

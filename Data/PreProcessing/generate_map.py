@@ -3,7 +3,7 @@ python -m pip install basemap-data
 python -m pip install basemap-data-hires
 https://github.com/matplotlib/basemap
 """
-def plot_map(lat,lon):
+def plot_map(lat,lon,figname):
     from mpl_toolkits.basemap import Basemap
     import matplotlib.pyplot as plt
 
@@ -22,6 +22,10 @@ def plot_map(lat,lon):
     # # m.plot(x,y,'go',markersize=4,alpha=.5)
 
     plt.title('Geo Plotting')
-    plt.show()
+    plt.savefig(figname)
 
-plot_map([-37],[146])
+
+import pandas as pd
+df=pd.read_csv("Dense_Cluster/initial.csv")
+# print(df["latitude"].tolist(),df["longitude"].tolist())
+plot_map(df["latitude"].tolist(),df["longitude"].tolist(),"year_total.png")

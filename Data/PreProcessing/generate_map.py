@@ -12,7 +12,7 @@ def plot_map(lat,lon):
     m.drawcoastlines()
     m.drawcountries()
     m.drawstates()
-    m.fillcontinents(color='#04BAE3', lake_color='#FFFFFF')
+    m.fillcontinents(color='#3C5C9B', lake_color='#FFFFFF')
     m.drawmapboundary(fill_color='#FFFFFF')
     
     x,y = m(lon,lat)

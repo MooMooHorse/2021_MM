@@ -39,23 +39,79 @@
 
 \section{Introduction}
 
-  \begin{center}
-  \begin{tabular}{ | m{5em} | m{1cm}| m{2cm} | } 
-    \hline
-    cell1 dummy text dummy text dummy text& cell2 & cell3 \\ 
-    \hline
-    cell1 dummy text dummy text dummy text & cell5 & cell6 \\ 
-    \hline
-    cell7 & cell8 & cell9 \\ 
-    \hline
-  \end{tabular}
-  \end{center}
+\graphicspath{{figures/}{../figures/}}
 
-  \subfile{sections/introduction}
-  What a dick\cite{yaggi2006sleep}
-Link\cite{WinNT}
-\section{Basic Analysis of the problem}
-  \subfile{sections/basic_analysis}
+\subsection{Background}
+Wildfire spreads rapidly in Australia. 
+In fire season, it's devastating for people's safety and properties. Victoria's
+Country Fire Authority (CFA) uses different means to protect its people. 
+Drones carrying high definition \& thermal imaging cameras and telemetry 
+sensors were sent for surveillance and situational awareness (SSA). 
+Drone repeaters, transceivers that automatically rebroadcast signals 
+at higher powers can help connect Emergency Operations Center (EOC) with SSA and front-line employees with VHF/UHF bands.
+
+\subsection{Problem Restatement}
+
+\subsubsection{Limits}
+
+\begin{itemize}
+  \item
+    Drone-related
+  
+    \begin{itemize}
+    \item
+      Cost \$1000 per drone
+    \item
+      Flight Range 30 km
+    \item
+      Transmission Range 20 km
+    \item
+      Flight Speed 20 m/s
+    \end{itemize}
+  \item
+    Fire-related
+  
+    \begin{itemize}
+    \item
+      Size
+    \item
+      Frequency
+    \end{itemize}
+  \end{itemize}
+
+\subsubsection{Targets}
+
+
+\begin{itemize}
+  \item
+    Deployment of drones for fast response
+  
+    \begin{itemize}
+    \item
+      Reduce cost
+    \item
+      Increase weighted coverage
+    \end{itemize}
+  \item
+    Fire Prediction
+  \item
+    Deployment of drones for front-line personnel in different
+    circumstances
+  
+    \begin{itemize}
+    \item
+      Build models for different fire size
+    \item
+      Build models considering different terrians
+    \end{itemize}
+  \end{itemize}
+
+\subsection{Our Work}
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{flowchart1.png}
+  \caption{Our Work}
+  % \label{fig:boat1}
+\end{figure}
 
 \section{List Of Symbols}
   \subfile{sections/symbols}

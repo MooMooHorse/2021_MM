@@ -88,9 +88,11 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 
 ## Fast Response Model
 
-### Data Pre-processing (JXB)
+### Data Pre-processing ()
 
-### Clustering (JXB)
+
+
+### Clustering ()
 
 ### In-Cluster Processing(RH)
 
@@ -115,5 +117,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 ## Pearl and Spur Model
 
 ### Pearl Model (TBD)
+
+![截屏2022-02-11 14.00.36](https://s2.loli.net/2022/02/11/FJeX9DlHrIc5Nfo.png)
 
 ### Spur Model (TBD)

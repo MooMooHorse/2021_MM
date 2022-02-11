@@ -15,6 +15,7 @@ def plot_map(lat,lon,col,mksz,rangesize,figname="temp.png"):
     m.fillcontinents(color='#3C5C9B', lake_color='#FFFFFF')
     m.drawmapboundary(fill_color='#FFFFFF')
     
+    # print(figname)
     x,y = m(lon,lat)
     m.plot(x,y,'o',c=tuple(col),markersize=mksz,alpha=.5)
     m.plot(x,y,'o',c=tuple(col),markersize=rangesize,alpha=.2)
@@ -22,7 +23,7 @@ def plot_map(lat,lon,col,mksz,rangesize,figname="temp.png"):
     # # x,y = m(lon2,lat2)
     # # m.plot(x,y,'go',markersize=4,alpha=.5)
 
-    plt.title('Geo Plotting')
+    plt.title('Cleaned Distribution of Fire Locations')
     plt.savefig(figname)
     # plt.show()
 
@@ -65,7 +66,10 @@ def Clustering(lat,lon,sparse_or_dense,figname):
     # Black removed and is used for noise instead.
     unique_labels = set(labels)
     colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
+    cooll=colors[2]
+    # print(cooll)
     for k, col in zip(unique_labels, colors):
+        # print("!")
         if k == -1:
             # Black used for noise.
             col = [0, 0, 0, 1]
@@ -74,18 +78,19 @@ def Clustering(lat,lon,sparse_or_dense,figname):
 
         xy = X[class_member_mask & core_samples_mask]
         if sparse_or_dense=="dense":
-            plot_map(xy[:,0],xy[:,1],col,3,figname)
+            # print("!")
+            plot_map(xy[:,0],xy[:,1],cooll,3,0,figname)
         # plt.plot(
         #     xy[:, 0],
         #     xy[:, 1],
         #     "o",
-        #     c=tuple(col),
+        #     c=tuple(cooll),
         #     markersize=3,
         # )
 
         xy = X[class_member_mask & ~core_samples_mask]
         if sparse_or_dense=="sparse":
-            plot_map(xy[:,0],xy[:,1],col,3,figname)
+            plot_map(xy[:,0],xy[:,1],col,3,0,figname)
         # plt.plot(
         #     xy[:, 0],
         #     xy[:, 1],
@@ -132,11 +137,13 @@ def K_Mean_Clustering(lat,lon,figname):
 
 
 import pandas as pd
-df=pd.read_csv("Dense_Cluster/ini_filt1.csv")
+df=pd.read_csv("Part1_Cluster/ini_filt1.csv")
 
-Cen_Lat,Cen_Lon=K_Mean_Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense_cluster.png")
+Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense","no_clustering.png")
 
-df["latitude"]=pd.Series(Cen_Lat)
-df["longitude"]=pd.Series(Cen_Lon)
+# Cen_Lat,Cen_Lon=K_Mean_Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense_cluster.png")
 
-df.to_csv("Dense_Cluster/Center_Coord.csv")
+# df["latitude"]=pd.Series(Cen_Lat)
+# df["longitude"]=pd.Series(Cen_Lon)
+
+# df.to_csv("Dense_Cluster/Center_Coord.csv")

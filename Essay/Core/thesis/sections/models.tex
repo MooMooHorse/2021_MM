@@ -4,5 +4,26 @@
 \graphicspath{{figures/}{../figures/}}
 
 \begin{document}
-  ;
-\end{document}
+\subsection{Fast Response Model}
+To discuss the possible deployment of drones in order to detect fire and transmit the signal to EOC,
+ we design Fast Response Model to maximize coverage and minimize the cost. To represent the fire distribution,
+  fire frequency and fire size, we come up with several well-designed indices and use fire location in certain
+   period to represent those factors with minimum lost of information.  Since it's not economically
+    efficient to cover all the land of Victoria because the drones are able to move and the fact that fire can
+     spread and then be detected, we use weighted covering lost(WCL) to represent the cost for not covering 
+     all the possible locations of fire. We use the data in 2020 for case study, but the strategy we adapt and
+      the data we compute is generic and can be used in various situation. \\
+
+      After sensitivity test, we proved the robustness of the model. It can be showed that the Fast Response Model can be used in different size of fire, different frequency of fire, and different distribution of fire in state of Victoria and other places in the world.
+\subsubsection{Data Pre-processing}
+For the sake of CFA, our model should only be considering the fire situation within the range of state of Victoria. The data we obtained from NASA database is contains noise and locations out of border. The first step of data pre-processing is meant to sift out all the illegal point with criteria mentioned above. Considering the spatial location of noise point,
+ we use DBSCAN clustering with ball tree \cite{enwiki:1065597644} algorithm, and is implemented by sci-learn 
+ project\cite{scikit-learn}. 
+ Since the data contains latitude and longitude, 
+ to define the distance function for clustering one need to use the haversine formula\cite{haversine} to calculate the great-circle distance between two points.
+\[ dist=2\cdot R_{e} \cdot \arctan \Big( \sqrt{\frac {\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
+\cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} })}
+{1-(\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
+\cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} }))}} \Big) \]
+
+ \end{document}

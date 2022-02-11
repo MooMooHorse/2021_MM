@@ -1,20 +1,26 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \begin{abstract}
-  Little introduction on background.\\
-  For the first part of the program, our subject is countries since one country has same feature for choosing languages and
-  we only consider the choice of first language and second language for the new-borns, 
-  since other subjects have less possiblity of changing their choice of first and second language.
-  For the first language, we set a model with the assumption that the new-born take the native language of the country as their first language.
-  For the second language, we set choose-second-language model, changing perdiction model to assessment model for individual, and we use 
-  Monte Carlo Method to change the number of second language speaker to certain languages,
-  and we assign different weight by AHP model to different factors that might affect the choices made by
-  people in different countries. 
-  For the second part of the problem, we target at languages and select them by multiple matrices, merging them if possible and locate 6 extra office
-  that can provide most target customoers convenience still with AHP model.
-  
+  Australia is undergoing huge wildfires in every state. To protect people and safety and property, we establish a model to use two types of drones to help Country Fire Authority (CFA) conduct “Rapid Bushfire Response”, 
+  and front-line personnel communicate with Emergency Operations Center (EOC).
+  \\ We use Victoria Fire Report Data\cite{earthdata}, using fire report places in certain 
+  time period to represent locations where fires happened on average.
+   This allows us to take into account of factors such as fire size and 
+   frequency, economic cost and safety, weighted region area covered by drones.  \\ 
+   We set Fast Response Model for deployment of drones for fast response, we quantify the
+   coverage with a weighted quantity. We build a model to investigate its' relationship with 
+   the economic cost. For a certain coverage by drone, we devise a strategy to distribute SSAs by using
+    k-means with special distance function and we use minimum spanning tree to 
+   distribute repeaters to connect them. We show the mathematical properties to such distance to ensure the correctness of our algorithm.
+   \\ We set Fire Prediction Model for second part of problem. we divide Victoria into several zones, 
+   and use statistics of zones in different time to form a time series. 
+   We predict the time series using convolutional Long Short-Term Memory (convLSTM). \\ 
+   We set Pearl Model and Spur Model for Deployment of drones for front-line personnel in different circumstances, 
+   we use separate deployment strategies for small and big sized fire considering the effect of terrain. \\ 
+   The sensitivity analysis shows robustness in our model. Meanwhile, we combine all the models to finish the annotated
+  Budget Request to help CFA with acceptable cost.
   \begin{keywords}
-    1;
+    Clustering, Minimum Spanning Tree, ConvLSTM, Terrian;
   \end{keywords}
 \end{abstract}
 \maketitle

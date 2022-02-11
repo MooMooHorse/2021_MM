@@ -128,11 +128,11 @@ $$
 
 To deploy drones in a way that reaches the target of fast response, we first need to quantify the target using one index, which we define it as weighted covering lost(WCL).
 $$
-WCL=\sum_j \int _{x0} ^{x1}  { (x-r_c)\cdot (1-p_{j,x})} \cdot vs_{j,x}  \  dx \\ \\
+WCL=\sum_j \Bigg(\int _{x0} ^{x1}  { (x-r_c)\cdot (1-p_{j,x})} \cdot vs_{j,x} \Bigg) \  dx \\ \\
 $$
 To simplify our model, we assume $vs_{j,x}=v$, which is a stable value, then we have.
 $$
-WCL=\sum_j (\int _{x0} ^{x1}  { (x-r_c)\cdot p_{j,x}} \cdot  v  \  dx)^2
+WCL=\sum_j \Bigg(\int _{x0} ^{x1}  { (x-r_c)\cdot p_{j,x}} \cdot  v  \  dx\Bigg)^2
 $$
 In order to simply the model as well as simulate the distribution of $p_{j}$, we use Ridge Distribution to set $p_{j,x}$, which is the probability of rim of fire at the position which is $x$ km from the nearest SSA, as following
 $$
@@ -145,11 +145,11 @@ p_{j,x}=\left\{
 $$
 This gives us
 $$
-WCL=\sum_j (\int _{x0} ^{x1}  { (x-r_c)\cdot (\frac 1 2 + \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ))} \cdot  v  \  dx)^2
+WCL=\sum_j \Bigg(\int _{x0} ^{x1}  { (x-r_c)\cdot (\frac 1 2 + \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ))} \cdot  v  \  dx \Bigg)^2
 $$
 We use the concept of substitution distance($sdist$) to investigate the deployment strategy.
 $$
-sdist=||\int _{x0} ^{x1}  { (x-r_c)\cdot (\frac 1 2 + \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ))} \cdot  v  \  dx||
+sdist=\Bigg\| \int _{x0} ^{x1}  { (x-r_c)\cdot (\frac 1 2 + \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ))} \cdot  v  \  dx \Bigg\|
 $$
 We define $sdist$ in a way that guarantees $sdist$ is positively correlated to $x$ which is the distance to the center, that is, the place where the nearest drone is deployed.
 
@@ -177,7 +177,11 @@ Combined both situation, we succeed in connecting all SSAs in a way that guarant
 
 #### Dense Cluster
 
-For dense cluster 
+For dense cluster, we choose shrink point strategy. For every dense cluster which is formed by a set of SSAs, we use an algorithm to settle the distribution of core repeater.
+
+A core repeater is defined as, the repeater that can receive signal from SSAs.
+
+We want the combination of core repeaters to be 
 
 #### Sparse Cluster
 

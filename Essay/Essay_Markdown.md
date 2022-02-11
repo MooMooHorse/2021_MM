@@ -199,14 +199,7 @@ The data source used in this task is from Moderate-resolution Imaging Spectrorad
 
 ### Time series construction
 
-
-
 ### ConvLSTM
-
-<<<<<<< HEAD
-=======
-
-### ConvLSTM (LR)
 
 
 Time series data prediction refers to learning past time series and predicting future changes. Traditional Neural networks cannot solve the problem of time-axis variation, so RNN (Recurrent Neural network) is developed (Jordan et al., 1997).
@@ -245,6 +238,7 @@ $$
 \mathbfit{i}_t=\sigma(\mathbfit{W}_{xi}*\mathbfit{X}_{t}+\mathbfit{W}_{hi}*\mathbfit{H}_{t-1}+\mathbfit{W}_{ci}\circ\mathbfit{C}_{t-1}+b_i)
 \end{equation}
 $$
+
 
 $$
 \begin{equation}

@@ -155,7 +155,7 @@ We define $sdist$ in a way that guarantees $sdist$ is positively correlated to $
 
 To balance economical costs and safety, we set a threshold for $WCL$, $tWCL$ which is currently set to a certain value in our later investigation, but it can be adjusted according to real situation. It will be illustrated more thoroughly in the following section about sensitivity and robustness. We use modified $k-means$ cluster to determine the positions of SSAs, which is described as follows
 
-![image-20220211181747899](https://s2.loli.net/2022/02/11/gTmZnXOFjYIVMNi.png)
+<img src="https://s2.loli.net/2022/02/11/gTmZnXOFjYIVMNi.png" alt="image-20220211181747899" style="zoom:67%;" />
 
 This allows us to cluster the locations to their respective drones. k-means algorithm is used here since the $sdist$ is positively correlates to distance. So the correctness of the algorithm can be ensured.
 

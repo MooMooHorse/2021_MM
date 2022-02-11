@@ -99,7 +99,7 @@ After sensitivity test, we proved the robustness of the model. It can be showed 
 
 ### Data Pre-processing (RH)
 
-For the sake of CFA, our model should only be considering the fire situation within the range of state of Victoria. The data we obtained from NASA database is contains noise and locations out of border. The first step of data pre-processing is meant to sift out all the illegal point with criteria mentioned above. Considering the spatial location of noise point, we use DBSCAN clustering with ball tree[https://en.wikipedia.org/wiki/Ball_tree] algorithm, and is implemented by sci-learn project[https://scikit-learn.org/stable/about.html#citing-scikit-learn]. Since the data contains latitude and longitude, to define the distance function for clustering one need to use the haversine formula["http://www.movable-type.co.uk/scripts/latlong.html"] to calculate the great-circle distance between two points.
+For the sake of CFA, our model should only be considering the fire situation within the range of state of Victoria. The data we obtained from NASA database is contains noise and locations out of border. The first step of data pre-processing is meant to sift out all the illegal point with criteria mentioned above. Considering the spatial location of noise point, we use DBSCAN clustering with ball tree algorithm, and is implemented by sci-learn project. Since the data contains latitude and longitude, to define the distance function for clustering one need to use the haversine formula to calculate the great-circle distance between two points.
 $$
 dist=2\cdot R_{e} \cdot \arctan (\sqrt{\frac {\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
 \cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} })}
@@ -167,11 +167,17 @@ Given the fire location distribution, we plot the SSA's location as follow. The 
 
 ### Deploy Repeaters
 
-The second part of Fast Response Model is connecting all the SSAs using the least repeaters, which requires
+The second part of Fast Response Model is connecting all the SSAs using the least repeaters. We solve this problem by divide and conquer and with the help of minimum spanning tree. 
+
+For Dense Cluster, we choose to shrink several SSAs into one, since when it's dense, one repeater can cover multiple SSAs. Then we build minimum spanning tree on the repeaters.
+
+For Sparse Cluster, we choose to build minimum spanning tree directly.
+
+Combined both situation, we succeed in connecting all SSAs in a way that guarantees both the stability of connection and minimum economic cost.
 
 #### Dense Cluster
 
-
+For dense cluster 
 
 #### Sparse Cluster
 
@@ -184,8 +190,7 @@ The second part of Fast Response Model is connecting all the SSAs using the leas
 ### Data Pre-processing
 
 The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format.
-
-
+### Build Map with Fire Index (LR)
 ### Build Map with Fire Index
 
 
@@ -193,6 +198,10 @@ The data source used in this task is from Moderate-resolution Imaging Spectrorad
 
 ### ConvLSTM
 
+
+### ConvLSTM (LR)
+
+>>>>>>> RenHao
 Time series data prediction refers to learning past time series and predicting future changes. Traditional Neural networks cannot solve the problem of time-axis variation, so RNN (Recurrent Neural network) is developed (Jordan et al., 1997).
 
 However, due to the poor performance of classical RNN in extracting long time series information and the limited time series information extracted, Hochreiter proposed LSTM network model (Hochreiter et al.,1997). In classical RNN, gates structure is added to selectively add and delete the past timing information, and input gate, output gate and forgetting gate are added to control the input and output of data of this unit (an LSTM cell is a basic unit) and the increase and decrease of the output information of the previous unit respectively. The LSTM formula is expressed as follows:
@@ -203,8 +212,7 @@ $\mathbfit{f}_t=\sigma(\mathbfit{W}_{xf}\mathbfit{X}_{t}+\mathbfit{W}_{hf}\mathb
 
 $\mathbfit{C}_t=\mathbfit{f}_{t}\circ\mathbfit{C}_{t-1}+\mathbfit{i}_t\circ\tanh(\mathbfit{W}_{xc}\mathbfit{X}_{t}+\mathbfit{W}_{hc}\mathbfit{H}_{t-1}+b_c)$
 
-$\mathbfit{o}_t=\sigma(\mathbfit{W}_{xo}\mathbfit{X}_{t}+\mathbfit{W}_{ho}\mathbfit{H}_{t-1}+\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}+b_o)$
-
+$
 
 Where $t $ stands for time step, subscript $i,f,o$ stands for input gate, output gate and forgetting gate. $\mathbfit{C}$ and $\mathbfit{H}$ represent cell state (gated output information) and hidden state (output value at each time step) respectively, $\mathbfit{W}$ represents weight of corresponding data, $\mathbfit{X}$ represents input data, $b$ represents bias value, and $\sigma$ represents activation function. о means Hadamard product.
 
@@ -228,6 +236,17 @@ Based on the deep learning framework Pytorch, the ConvLSTM is constructed using 
 
 
 
+### Reference
+
+Jordan M I.1997. Serial Order: A Parallel Distributed Processing Approach. Advances in Psychology, pp. 471-495 .[DOI:10.1016/S0166-4115(97)80111-2]
+
+Hochreiter S and Schmidhuber J .1997.Long Short-Term Memory. Neural computation, 9(8):1735-1780.[DOI:10.1162/neco.1997.9.8.1735]
+
+Where $t $ stands for time step t, subscript $i,f,o$ stands for input gate, output gate and forgetting gate.
+
+Based on the deep learning framework Pytorch, the ConvLSTM is constructed using Python language, and the experimental equipment environment is NVIDIA GeForce GTX1080 GPU.
+
+### Model Fitting (LR)
 ### Reference
 
 Jordan M I.1997. Serial Order: A Parallel Distributed Processing Approach. Advances in Psychology, pp. 471-495 .[DOI:10.1016/S0166-4115(97)80111-2]

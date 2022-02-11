@@ -101,7 +101,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 | $b$                     | Bias value                                                   |
 | $\sigma$                | Activation function                                          |
 | $\circ$                 | Hadamard product                                             |
-|                         |                                                              |
+| $*$                     | Convolution operation                                        |
 |                         |                                                              |
 |                         |                                                              |
 |                         |                                                              |
@@ -336,7 +336,7 @@ $$
 
 
 
-The symbol meaning in the formula is the same as that in LSTM. The full connection of input variables is replaced by convolution operation, $*$ represents convolution operation. According to the internal structure of ConvLSTM in FIG. 2, it can be seen that input gate, output gate and forgetting gate all carry out convolution operation for input and hidden layer.
+The symbol meaning in the formula is the same as that in LSTM. The full connection of input variables is replaced by convolution operation. According to the internal structure of ConvLSTM in figure, it can be seen that input gate, output gate and forgetting gate all carry out convolution operation for input and hidden layer.
 
 ![image-20220211203954162](https://s2.loli.net/2022/02/11/LRnaVqQxbZtSv29.jpg)
 

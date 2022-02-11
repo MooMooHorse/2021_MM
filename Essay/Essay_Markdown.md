@@ -203,9 +203,6 @@ The data source used in this task is from Moderate-resolution Imaging Spectrorad
 
 ### ConvLSTM
 
-<<<<<<< HEAD
-=======
-
 ### ConvLSTM (LR)
 
 

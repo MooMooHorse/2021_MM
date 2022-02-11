@@ -23,7 +23,7 @@ def plot_map(lat,lon,col,mksz,rangesize,figname="temp.png"):
     # # x,y = m(lon2,lat2)
     # # m.plot(x,y,'go',markersize=4,alpha=.5)
 
-    plt.title('Cleaned Distribution of Fire Locations')
+    plt.title('Fire Locations for Each SSA')
     plt.savefig(figname)
     # plt.show()
 
@@ -114,34 +114,53 @@ def K_Mean_Clustering(lat,lon,figname):
     from sklearn.datasets import make_blobs
     from sklearn.preprocessing import StandardScaler
 
-    X= [xy for xy in zip(lat,lon)] 
+    X=np.array( [xy for xy in zip(lat,lon)] )
 
     db =  k_means(X,n_clusters=10)
+
     Center=db[0]
     labels = db[1]
 
+    # print(labels==0)
+
+    import matplotlib.pyplot as plt
+    unique_labels = set(labels)
+    colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
+    # print(cooll)
+    for k, col in zip(unique_labels, colors):
+
+        class_member_mask = labels == k
+
+        xy = X[class_member_mask]
+        
+        plot_map(xy[:,0],xy[:,1],col,3,0,figname)
+
+
+
+
 
     
-    X=[x[0] for x in Center]
-    Y=[x[1] for x in Center]
-    # print(Y)
-    # print(Center)
-    import matplotlib.pyplot as plt
-    color_size=5
-    colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, color_size)]
+    # X=[x[0] for x in Center]
+    # Y=[x[1] for x in Center]
+    # # print(Y)
+    # # print(Center)
+    # import matplotlib.pyplot as plt
+    # color_size=5
+    # colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, color_size)]
 
 
-    plot_map(X,Y,colors[1],3,23,"thermal_drones_deployment.png")
+    # plot_map(X,Y,colors[1],3,23,"thermal_drones_deployment.png")
 
-    return X,Y
+    # return X,Y
 
 
 import pandas as pd
 df=pd.read_csv("Part1_Cluster/ini_filt1.csv")
 
-Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense","no_clustering.png")
+# Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense","no_clustering.png")
 
-# Cen_Lat,Cen_Lon=K_Mean_Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"dense_cluster.png")
+# Cen_Lat,Cen_Lon=
+K_Mean_Clustering(df["latitude"].tolist(),df["longitude"].tolist(),"K-means_clustering.png")
 
 # df["latitude"]=pd.Series(Cen_Lat)
 # df["longitude"]=pd.Series(Cen_Lon)

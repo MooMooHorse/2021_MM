@@ -11,14 +11,42 @@
 % 	\end{tabularx}
 % \end{center}
 
-\glsxtrnewsymbol[
-	description={%
-		an example symbol
-	},
-	unit={\si{m^2}}
-]{e}{\ensuremath{e}}
 
-\printunsrtglossary[type=symbols,style=symbunitlong] % symbols
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	Definition & Description \\
+	\midrule
+	\endhead
+	\(dist\) & Distance between two points in Euclidean coordinate system \\
+	\(R_e\) & Radius of earth \\
+	\(\Delta \varphi _{lat}\) & Thange of latitude \\
+	\(\Delta \lambda _{lon}\) & Thange of longitude \\
+	\(eps\) & Tf the distance between two points is lower or equal to (eps),
+	these points are considered neighbuors. \\
+	\(minPoints\) & The minimum number of points to form a dense region. \\
+	\(x_0\) & Distance to drone when the fire is recorded in our data \\
+	\(x_1\) & Distance to drone when drone detect fire \\
+	\(dis_{j,t}\) & The shortest distance of fire location indexed \(j\) to
+	the nearest drone at distance \(x\) from the drone \\
+	\(r_c\) & The radius of drone in idealized condition. \\
+	\(vs_{j,x} \) & The spread rate of fire at the rim of fire area indexed
+	\(j\) at distance \(x\) from the drone  \\
+	\(p_{j,x}\) & The probability for drones to detect rim of fire location
+	\(j\) at distance \(x\) from the drone \\
+	\(v\) & Stable spread rate which is assumed to simply the model \\
+	\(WCL\) & Weighted coverage loss : describing the loss the weighted area
+	for a deployment strategy \\
+	\(r_o\) & Outer-radius of drone, meaning the furthest distance the drone
+	can detect, that is, \(50\) km \\
+	\(tWCL\) & Threshold for \(WCL\) to determine how much SSA should be
+	deployed. \\
+	& \\
+	& \\
+	& \\
+	\bottomrule
+	\end{longtable}
+	
+
 % \printunsrtglossary[type=symbols,style=symblong] % symbols without units
 
 

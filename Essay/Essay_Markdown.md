@@ -181,17 +181,17 @@ The second part of Fast Response Model is connecting all the SSAs using the leas
 
 ## Fire Prediction Model
 
-### Data Pre-processing (LR)
+### Data Pre-processing
 
 The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format.
 
-### Build Map with Fire Index (LR)
 
-### Time series construction (LR)
-
+### Build Map with Fire Index
 
 
-### ConvLSTM (LR)
+
+
+### ConvLSTM
 
 Time series data prediction refers to learning past time series and predicting future changes. Traditional Neural networks cannot solve the problem of time-axis variation, so RNN (Recurrent Neural network) is developed (Jordan et al., 1997).
 
@@ -205,11 +205,28 @@ $\mathbfit{C}_t=\mathbfit{f}_{t}\circ\mathbfit{C}_{t-1}+\mathbfit{i}_t\circ\tanh
 
 $\mathbfit{o}_t=\sigma(\mathbfit{W}_{xo}\mathbfit{X}_{t}+\mathbfit{W}_{ho}\mathbfit{H}_{t-1}+\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}+b_o)$
 
-Where $t $ stands for time step t, subscript $i,f,o$ stands for input gate, output gate and forgetting gate.
+
+Where $t $ stands for time step, subscript $i,f,o$ stands for input gate, output gate and forgetting gate. $\mathbfit{C}$ and $\mathbfit{H}$ represent cell state (gated output information) and hidden state (output value at each time step) respectively, $\mathbfit{W}$ represents weight of corresponding data, $\mathbfit{X}$ represents input data, $b$ represents bias value, and $\sigma$ represents activation function. о means Hadamard product.
+
+ConvLSTM is a variant of LSTM proposed on the basis of LSTM. It replaces the fully connected state between the input layer and the hidden layer and between the hidden layer and the hidden layer of LSTM with the convolution connection, which makes full use of the spatial information that LSTM cannot. LSTM needs to transform image data into one-dimensional vector when processing image data, and cannot process spatial structure information of original image data. Compared with LSTM model,Conv LSTM can better extract spatial and temporal structure information from time series images. ConvLSTM model formula is expressed as follows:
+
+$\mathbfit{i}_t=\sigma(\mathbfit{W}_{xi}*\mathbfit{X}_{t}+\mathbfit{W}_{hi}*\mathbfit{H}_{t-1}+\mathbfit{W}_{ci}\circ\mathbfit{C}_{t-1}+b_i) $
+
+$\mathbfit{f}_t=\sigma(\mathbfit{W}_{xf}*\mathbfit{X}_{t}+\mathbfit{W}_{hf}*\mathbfit{H}_{t-1}+\mathbfit{W}_{cf}\circ\mathbfit{C}_{t-1}+b_f) $
+
+$\mathbfit{C}_t=\mathbfit{f}_{t}\circ\mathbfit{C}_{t-1}+\mathbfit{i}_t\circ\tanh(\mathbfit{W}_{xc}*\mathbfit{X}_{t}+\mathbfit{W}_{hc}*\mathbfit{H}_{t-1}+b_c)$
+
+$\mathbfit{o}_t=\sigma(\mathbfit{W}_{xo}*\mathbfit{X}_{t}+\mathbfit{W}_{ho}*\mathbfit{H}_{t-1}+\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}+b_o)$
+
+The symbol meaning in the formula is the same as that in LSTM. The full connection of input variables is replaced by convolution operation, $*$ represents convolution operation. According to the internal structure of ConvLSTM in FIG. 2, it can be seen that input gate, output gate and forgetting gate all carry out convolution operation for input and hidden layer.
+
+![image-20220211203954162](https://s2.loli.net/2022/02/11/LRnaVqQxbZtSv29.jpg)
+
+$\mathbfit{W}_{ci}\circ\mathbfit{C}_{t-1}$, $\mathbfit{W}_{cf}\circ\mathbfit{C}_{t-1}$ and $\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}$ in the formula indicate that the input, output and forgetting gates are connected to the Peephole(Gers et al., 2000) of the previous cellular state. As shown in the figure, the Peephole connection adds cell state information to each gate. Since the unit may have a door state of 0, which results in a lack of important information, adding the Peephole operation can improve this shortcoming.
 
 Based on the deep learning framework Pytorch, the ConvLSTM is constructed using Python language, and the experimental equipment environment is NVIDIA GeForce GTX1080 GPU.
 
-### Model Fitting (LR)
+
 
 ### Reference
 

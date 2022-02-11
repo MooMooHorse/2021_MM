@@ -2,8 +2,24 @@
 % this files need complied in main.tex
 \begin{document}
 
-\begin{assumption}\label{asu:1}
-  This is a assumption.
-\end{assumption}
+\begin{itemize}
+  \item
+    We use one year data in Victoria with data provided by Earth Data to
+    represent the general cases in Australia. However, our model to this
+    case adapt to arbitrary cases, so it's without losing generality.
+  \item
+    We assume once the fire is within the detective range of drones, it
+    will be found out without delay.
+  \item
+    We assume the spread rate of fire is stable and at a certain value,
+    which is not the case in real world, but one can use the original
+    formulae given in the model to simply modify the model.
+  \item
+    Only 20 years of data is used for machine learning, the error produced
+    is within the acceptable range.
+  \item
+    The terrain situation can be more complicated in real world, we
+    idealize mountain and other barriers as parabolic-like object.
+  \end{itemize}
 
 \end{document}

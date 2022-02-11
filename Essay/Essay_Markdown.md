@@ -8,9 +8,9 @@ Australia is undergoing huge wildfires in every state. To protect people and saf
 
 We use `Victoria Fire Report Data`, using fire report places in certain time period to represent locations where fires happened on average. This allows us to take into account of factors such as fire size and frequency, economic cost and safety, weighted region area covered by drones. 
 
-We set Fast Response Model for deployment of drones for fast response, we divide fire locations into clusters. There are two aspects we looked into, in-cluster relationship and relationship between clusters. For in-cluster relationship, according to the density of fire locations, we divide clusters into two types, dense cluster and sparse cluster. We establish separate models for each type of cluster. For dense cluster, we treated the cluster as a filled irregular region, and we establish Least Circles Maximum Coverage(LCMC) Model. For sparse cluster, we treat each fire location as node, and build edges for every node to form complete graph, and we build minimum spanning tree for it to ensure connectivity with lowest cost. For between-cluster relationship, we build edges between each cluster, and treat each cluster as a node. We ensure the connectivity by building minimum spanning tree.
+We set Fast Response Model for deployment of drones for fast response, we quantify the coverage with a weighted quantity. We build a model to investigate its' relationship with the economic cost. For a certain coverage by drone, we devise a strategy to distribute SSAs by using k-means with special distance function and we use minimum spanning tree to distribute repeaters to connect them. We show the mathematical properties to such distance to ensure the correctness of our algorithm.
 
-We set Fire Prediction Model for second part of problem. we divide Victoria into several zones, and use statistics of zones in different time to form a time series. We predict the time series using Long Short-Term Memory (LSTM).
+We set Fire Prediction Model for second part of problem. we divide Victoria into several zones, and use statistics of zones in different time to form a time series. We predict the time series using convolutional Long Short-Term Memory (convLSTM).
 
 We set Pearl Model and Spur Model for Deployment of drones for front-line personnel in different circumstances, we use separate deployment strategies for small and big sized fire considering the effect of terrain. 
 
@@ -167,9 +167,13 @@ Given the fire location distribution, we plot the SSA's location as follow. The 
 
 ### Deploy Repeaters
 
-#### In-Cluster Processing(RH)
+The second part of Fast Response Model is connecting all the SSAs using the least repeaters, which requires
 
-#### Between-Cluster Processing(RH)
+#### Dense Cluster
+
+
+
+#### Sparse Cluster
 
 
 
@@ -181,9 +185,9 @@ Given the fire location distribution, we plot the SSA's location as follow. The 
 
 The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format.
 
+
 ### Build Map with Fire Index
 
-### Time series construction
 
 
 
@@ -200,6 +204,7 @@ $\mathbfit{f}_t=\sigma(\mathbfit{W}_{xf}\mathbfit{X}_{t}+\mathbfit{W}_{hf}\mathb
 $\mathbfit{C}_t=\mathbfit{f}_{t}\circ\mathbfit{C}_{t-1}+\mathbfit{i}_t\circ\tanh(\mathbfit{W}_{xc}\mathbfit{X}_{t}+\mathbfit{W}_{hc}\mathbfit{H}_{t-1}+b_c)$
 
 $\mathbfit{o}_t=\sigma(\mathbfit{W}_{xo}\mathbfit{X}_{t}+\mathbfit{W}_{ho}\mathbfit{H}_{t-1}+\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}+b_o)$
+
 
 Where $t $ stands for time step, subscript $i,f,o$ stands for input gate, output gate and forgetting gate. $\mathbfit{C}$ and $\mathbfit{H}$ represent cell state (gated output information) and hidden state (output value at each time step) respectively, $\mathbfit{W}$ represents weight of corresponding data, $\mathbfit{X}$ represents input data, $b$ represents bias value, and $\sigma$ represents activation function. о means Hadamard product.
 
@@ -221,15 +226,13 @@ $\mathbfit{W}_{ci}\circ\mathbfit{C}_{t-1}$, $\mathbfit{W}_{cf}\circ\mathbfit{C}_
 
 Based on the deep learning framework Pytorch, the ConvLSTM is constructed using Python language, and the experimental equipment environment is NVIDIA GeForce GTX1080 GPU.
 
-### Model Fitting
+
 
 ### Reference
 
 Jordan M I.1997. Serial Order: A Parallel Distributed Processing Approach. Advances in Psychology, pp. 471-495 .[DOI:10.1016/S0166-4115(97)80111-2]
 
 Hochreiter S and Schmidhuber J .1997.Long Short-Term Memory. Neural computation, 9(8):1735-1780.[DOI:10.1162/neco.1997.9.8.1735]
-
-Gers F A and Schmidhuber J.2000. Recurrent nets that time and count. Proceedings of the IEEE-INNS-ENNS International Joint Conference on Neural Networks, 3:189 -194.[DOI:10.1109/IJCNN.2000.861302]
 
 ## Pearl and Spur Model
 

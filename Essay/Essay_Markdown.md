@@ -71,7 +71,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 
 | Definition              | Description                                                  |
 | ----------------------- | ------------------------------------------------------------ |
-| $dist$                  | Distance between two points in Euclidean coordinate system   |
+| $dist_{i,j}$            | Distance between two points (point $i$ and point $j$) in Euclidean coordinate system |
 | $R_e$                   | Radius of earth                                              |
 | $\Delta \varphi _{lat}$ | Thange of latitude                                           |
 | $\Delta \lambda _{lon}$ | Thange of longitude                                          |
@@ -87,6 +87,11 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 | $WCL$                   | Weighted coverage loss : describing the loss the weighted area for a deployment strategy |
 | $r_o$                   | Outer-radius of drone, meaning the furthest distance the drone can detect, that is, $50$ km |
 | $tWCL$                  | Threshold for $WCL$ to determine how much SSA should be deployed. |
+| $tcn$                   | Threshold of the number of core repeaters needed             |
+| $cn$                    | The number of core repeaters needed                          |
+| $nSSA$                  | The SSAs that are distributed                                |
+| $Ew_e$                  | Weight of the edge $e$ on graph for minimum spanning trees   |
+| $trf_e$                 | Transmission random factor of edge $e$                       |
 | $t$                     | Time step                                                    |
 | $i,f,o$                 | Input gate, output gate and forgetting gate                  |
 | $\mathbfit{C}$          | Cell state (gated output information)                        |
@@ -96,6 +101,12 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 | $b$                     | Bias value                                                   |
 | $\sigma$                | Activation function                                          |
 | $\circ$                 | Hadamard product                                             |
+|                         |                                                              |
+|                         |                                                              |
+|                         |                                                              |
+|                         |                                                              |
+|                         |                                                              |
+|                         |                                                              |
 |                         |                                                              |
 
 ## Fast Response Model
@@ -108,10 +119,12 @@ After sensitivity test, we proved the robustness of the model. It can be showed 
 
 For the sake of CFA, our model should only be considering the fire situation within the range of state of Victoria. The data we obtained from NASA database is contains noise and locations out of border. The first step of data pre-processing is meant to sift out all the illegal point with criteria mentioned above. Considering the spatial location of noise point, we use DBSCAN clustering with ball tree algorithm, and is implemented by sci-learn project. Since the data contains latitude and longitude, to define the distance function for clustering one need to use the haversine formula to calculate the great-circle distance between two points.
 $$
-dist=2\cdot R_{e} \cdot \arctan (\sqrt{\frac {\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
-\cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} })}
-{1-(\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
-\cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} }))}})
+\begin{equation}
+dist_{i,j}=2\cdot R_{e} \cdot \arctan \Bigg(\sqrt{\frac {\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _i\cdot 
+\cos \varphi _j \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} })}
+{1-(\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _i\cdot 
+\cos \varphi _j \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} }))}}\Bigg)
+\end{equation}
 $$
 This ensures the correctness of clustering.
 
@@ -119,12 +132,14 @@ To define a noise point which is inefficient to cover it, we define two variable
 
 To more easily obtain the optimized value, we first normalize data with standard normalization, then we set 
 $$
+\begin{equation}
 \left\{
 \begin{array}{**lr**}
 eps=0.15&  \\  
 minPoints=8
 \end{array}  
 \right.
+\end{equation}
 $$
 
 ![img](https://s2.loli.net/2022/02/11/FZf6Jrldk4aB8Hv.png)
@@ -135,28 +150,38 @@ $$
 
 To deploy drones in a way that reaches the target of fast response, we first need to quantify the target using one index, which we define it as weighted covering lost(WCL).
 $$
+\begin{equation}
 WCL=\sum_j \Bigg(\int _{x0} ^{x1}  { (x-r_c)\cdot (1-p_{j,x})} \cdot vs_{j,x} \Bigg) \  dx \\ \\
+\end{equation}
 $$
 To simplify our model, we assume $vs_{j,x}=v$, which is a stable value, then we have.
 $$
+\begin{equation}
 WCL=\sum_j \Bigg(\int _{x0} ^{x1}  { (x-r_c)\cdot p_{j,x}} \cdot  v  \  dx\Bigg)^2
+\end{equation}
 $$
 In order to simply the model as well as simulate the distribution of $p_{j}$, we use Ridge Distribution to set $p_{j,x}$, which is the probability of rim of fire at the position which is $x$ km from the nearest SSA, as following
 $$
+\begin{equation}
 p_{j,x}=\left\{
 \begin{array}{**lr**}
 \frac 1 2 - \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ) && 0\le x \le r_0 \\ 
 0 && x > r_0
 \end{array}  
 \right.
+\end{equation}
 $$
 This gives us
 $$
+\begin{equation}
 WCL=\sum_j \Bigg(\int _{x0} ^{x1}  { (x-r_c)\cdot (\frac 1 2 + \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ))} \cdot  v  \  dx \Bigg)^2
+\end{equation}
 $$
 We use the concept of substitution distance($sdist$) to investigate the deployment strategy.
 $$
+\begin{equation}
 sdist=\Bigg\| \int _{x0} ^{x1}  { (x-r_c)\cdot (\frac 1 2 + \frac 1 2 \sin \frac {\pi} {r_o}(x-\frac {r_o} {2} ))} \cdot  v  \  dx \Bigg\|
+\end{equation}
 $$
 We define $sdist$ in a way that guarantees $sdist$ is positively correlated to $x$ which is the distance to the center, that is, the place where the nearest drone is deployed.
 
@@ -188,13 +213,60 @@ For dense cluster, we choose shrink point strategy. For every dense cluster whic
 
 A core repeater is defined as, the repeater that can receive signal from SSAs.
 
-We want the combination of core repeaters to be 
+We want the combination of core repeaters to be in a way that allows the minimum number of repeaters to be distributed and all the SSAs' signal can be received. There seems to be no elegant solution to this problem because it is $NP$ problem. However, the small number of SSAs allows us to use brute force to compute such distribution.
 
-#### Sparse Cluster
-
-
+We define $cn$ to be the number of core repeaters needed, $nSSA$ to be the SSA that are distributed, we define $tcn$ to be the maximum number of core repeaters that are allowed, it's obvious that $tcn \le nSSA$. For simplicity of implementation, we set $tcn=nSSA$
 
 
+
+![image-20220211225533038](https://s2.loli.net/2022/02/11/Zdypw5xQXERI3ef.png)
+
+After the process above, we erase all the SSAs that have repeaters to receive their signals.
+
+#### Sparse Cluster and Final Linking
+
+ Now there are only sparse SSAs and sparse repeaters, it's natural to link them by Kruskal algorithm to make a minimum spanning tree.
+
+The first step is to build the graph with nodes and edges. 
+
+* Nodes are SSAs and repeaters, which is reasonable since they are sparse and can be discretized. 
+* Edges have weight defined below. Considering if the range of drones are tangent to each other, the transmission stability will be lowered, we introduce transmission random factor $trf$
+
+
+$$
+\begin{equation}
+Ew_e= \max{ \Bigg(\Bigg\lceil \frac { dis_{i,j}  - 2r_c - trf_e} {2r_c} \Bigg\rceil,0\Bigg)}
+\end{equation}
+$$
+Transmission factor is defined below to reduce the situation where ranges of drones are tangent, where $randi(x)$ function is to randomly produce a real number within interval $[0,x]$
+$$
+\begin{equation}
+trf_e= randi \Bigg( 1- \Bigg(\Bigg\lceil \frac { dis_{i,j}  - 2r_c - trf_e} {2r_c} \Bigg\rceil -\frac { dis_{i,j}  - 2r_c - trf_e} {2r_c} \Bigg)\Bigg)
+\end{equation}
+$$
+
+
+Then we use **Kruskal Algorithm** as described below to make a spanning tree.
+
+```
+@article{kruskal,
+title={Minimum Spanning Tree Determination Program
+Using Kruskal Algorithm on Visual Basic 6.0 },
+author={Nina Zakiah, Desniarti, Benny Sofyan Samosir},
+journal={International Journal of Science and Research},
+pages={1817--1821},
+year={2014}
+```
+
+
+
+![image-20220211232448402](C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png)
+
+
+
+Because of the introduction of $trf_e$ and the use of divide and conquer strategy, the outcome is not only stable but also efficient as shown. 
+
+![two_type](https://s2.loli.net/2022/02/11/7btwWVF2Bv1ZPhg.png)
 
 ## Fire Prediction Model
 
@@ -207,7 +279,6 @@ The data source used in this task is from Moderate-resolution Imaging Spectrorad
 ### Time series construction
 
 ### ConvLSTM
-
 
 Time series data prediction refers to learning past time series and predicting future changes. Traditional Neural networks cannot solve the problem of time-axis variation, so RNN (Recurrent Neural network) is developed (Jordan et al., 1997).
 

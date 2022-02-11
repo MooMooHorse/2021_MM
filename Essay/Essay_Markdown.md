@@ -93,17 +93,17 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 
 ## Fast Response Model
 
-<<<<<<< HEAD
 ### Data Pre-processing ()
 
 
 
 ### Clustering ()
-=======
+
 To discuss the possible deployment of drones in order to detect fire and transmit the signal to EOC, we design Fast Response Model to maximize coverage and minimize the cost. To represent the fire distribution, fire frequency and fire size, we come up with several well-designed indices and use fire location in certain period to represent those factors with minimum lost of information.  Since it's not economically efficient to cover all the land of Victoria because the drones are able to move and the fact that fire can spread and then be detected, we use weighted covering lost(WCL) to represent the cost for not covering all the possible locations of fire. We use the data in 2020 for case study, but the strategy we adapt and the data we compute is generic and can be used in various situation. 
 
 After sensitivity test, we proved the robustness of the model. It can be showed that the Fast Response Model can be used in different size of fire, different frequency of fire, and different distribution of fire in state of Victoria and other places in the world.
->>>>>>> main
+
+
 
 ### Data Pre-processing (RH)
 
@@ -199,6 +199,54 @@ Given the fire location distribution, we plot the SSA's location as follow. The 
 
 ### Pearl Model (TBD)
 
-![截屏2022-02-11 14.00.36](https://s2.loli.net/2022/02/11/FJeX9DlHrIc5Nfo.png)
+Background of the model
 
-### Spur Model (TBD)
+2019, Victoria, Australia suffered a severe bushfire. On 1th January, houses were burned to the groung as NSW fire spread to Corryong in the northern   Victoria. Corryong, the town which is surrounded by Mount Mitta and Wabba Wilderness Park was in great in danger. 
+
+In order to determine our model for optimizing the locations of hovering VHF/UHF radio-repeater drones for fires of different sizes on different terrains, we need to consider various terrains, including hills, plain and mountains. Corryong, the city lying in the basin, is perfect for our optimization. Therefore, we will take Corryong for an ecxample to explain our location strategy.
+
+1. Huge bushfire area assupmtion
+
+   We assume the fire is happening in the area surrounded by the red circle, the area is much larger than the drones hovering range. Our basic strategy is to supervise the edge of the bushfire area. Therefore , we will need the "Boots-on-the-ground” Forward Teams be at the front lines of the fire events carrying the VHF/UHF. Conisdering various situations, there is always no definitely perfect strategy to guide the teams to distribute. Thus, we consider all random situations for the distribution of the firefighters.
+
+   ![截屏2022-02-11 22.37.04](/Users/a966/Downloads/截屏2022-02-11 22.37.04.png)
+
+   ​																			Hypothetical bush fire area happening in the Corryong
+
+   Based on the bushfire area, we can get a latitude function along the periphery of the enclosed area, which is shown as below.
+
+   ![截屏2022-02-11 22.49.10](https://s2.loli.net/2022/02/11/1btMZUgaDKFqpf6.png)
+
+   This function has a x-axis which represents the distance along the periphery of the area from certain point, and a y-axis which represents the latitudes of the point. Considering the effect of latitude is significant to the height of drones should be, so that they avoid the signal loss caused by terrains as possible as they can.
+
+   We choose to use the Monte-Carlo algorithm to analyzide the effect of firefighters' distribution to the locations of the hovering drones. For the first step, we will distribute some fire fighter at the front line of the bushfire area for simulation. Below is one condition considered.
+
+   ![截屏2022-02-11 23.02.14](https://s2.loli.net/2022/02/11/KvTXJhZqfCS1RHA.png)
+
+   ​									              Green points represent forward teammenbers carring VHF/UHF (9 firefighters in simulation)
+
+   
+
+2. Drones' locations strategy
+
+   There are some basic principles we need to follow to settle the drones
+
+   1. The distance of two drones can't be over 20 km, which is maximum range that transceivers can spread and receive.
+   2. Every individual fire fighter must be received by at least one drone so that they can keep connected.
+   3. Drones should be settled along the periphery of the bushfire area.
+   4. Drones should be in the reasonable height so that the radio signal won't be interrupted by the terrain obstacles, for example hills between.
+   5. asdf
+
+3. a s d f
+
+   
+
+   
+
+
+
+
+
+
+
+### Spur Model (TBD) 

@@ -87,8 +87,15 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 | $WCL$                   | Weighted coverage loss : describing the loss the weighted area for a deployment strategy |
 | $r_o$                   | Outer-radius of drone, meaning the furthest distance the drone can detect, that is, $50$ km |
 | $tWCL$                  | Threshold for $WCL$ to determine how much SSA should be deployed. |
-|                         |                                                              |
-|                         |                                                              |
+| $t$                     | Time step                                                    |
+| $i,f,o$                 | Input gate, output gate and forgetting gate                  |
+| $\mathbfit{C}$          | Cell state (gated output information)                        |
+| $\mathbfit{H}$          | Hidden state (output value at each time step)                |
+| $\mathbfit{W}$          | Weight of corresponding data                                 |
+| $\mathbfit{X}$          | Input data                                                   |
+| $b$                     | Bias value                                                   |
+| $\sigma$                | Activation function                                          |
+| $\circ$                 | Hadamard product                                             |
 |                         |                                                              |
 
 ## Fast Response Model
@@ -228,8 +235,6 @@ $$
 \mathbfit{o}_t=\sigma(\mathbfit{W}_{xo}\mathbfit{X}_{t}+\mathbfit{W}_{ho}\mathbfit{H}_{t-1}+\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}+b_o)
 \end{equation}
 $$
-
-Where $t $ stands for time step, subscript $i,f,o$ stands for input gate, output gate and forgetting gate. $\mathbfit{C}$ and $\mathbfit{H}$ represent cell state (gated output information) and hidden state (output value at each time step) respectively, $\mathbfit{W}$ represents weight of corresponding data, $\mathbfit{X}$ represents input data, $b$ represents bias value, and $\sigma$ represents activation function. о means Hadamard product.
 
 ConvLSTM is a variant of LSTM proposed on the basis of LSTM. It replaces the fully connected state between the input layer and the hidden layer and between the hidden layer and the hidden layer of LSTM with the convolution connection, which makes full use of the spatial information that LSTM cannot. LSTM needs to transform image data into one-dimensional vector when processing image data, and cannot process spatial structure information of original image data. Compared with LSTM model,Conv LSTM can better extract spatial and temporal structure information from time series images. ConvLSTM model formula is expressed as follows:
 

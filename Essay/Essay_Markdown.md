@@ -239,6 +239,7 @@ $$
 \end{equation}
 $$
 
+
 $$
 \begin{equation}
 \mathbfit{f}_t=\sigma(\mathbfit{W}_{xf}*\mathbfit{X}_{t}+\mathbfit{W}_{hf}*\mathbfit{H}_{t-1}+\mathbfit{W}_{cf}\circ\mathbfit{C}_{t-1}+b_f) 

@@ -60,8 +60,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 ## Assumptions and Justifications
 
 * We use one year data in Victoria with data provided by Earth Data to represent the general cases in Australia. However, our model to this case adapt to arbitrary cases, so it's without losing generality.
-* Dense Cluster is defined as a cluster of locations whose density is above a certain threshold. We treat dense cluster as homogeneous irregular system, since our strategy can give it a high coverage rate, thus the error will be decreased to acceptable level.
-* Sparse Cluster is defined as a cluster of locations whose density is below a certain threshold. Instead of building minimum spanning tree on the whole state, we build it within cluster and between cluster respectively. This act will significantly improve the performance with our algorithm, but it will affect the optimization outcome. We use tolerated version to effectively compute the result within acceptable error, while it's preferred to build spanning tree treating each location as a node.
+* We assume once the fire is within the detective range of drones, it will be found out without delay.
 * Only 20 years of data is used for machine learning, the error produced is within the acceptable range.
 * The terrain situation can be more complicated in real world, we idealize mountain and other barriers as parabolic-like object.
 
@@ -69,28 +68,73 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 
 ## Symbols
 
-| Definition | Description |
-| ---------- | :---------: |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
-|            |             |
+| Definition              |                         Description                          |
+| ----------------------- | :----------------------------------------------------------: |
+| $dist$                  |  distance between two points in Euclidean coordinate system  |
+| $R_e$                   |                       radius of earth                        |
+| $\Delta \varphi _{lat}$ |                      change of latitude                      |
+| $\Delta \lambda _{lon}$ |                     change of longitude                      |
+| $eps$                   | if the distance between two points is lower or equal to (eps), these points are considered neighbuors. |
+| $minPoints$             |     the minimum number of points to form a dense region.     |
+| $t_0$                   |       time stamp when the fire is recorded in our data       |
+| $t_1$                   | time stamp when drone detect fire, which guarantees $dis_{j,t}-r_c \ge 0$ |
+| $dis_{j,t}$             | the shortest distance of fire location indexed $j$ to the nearest drone. |
+| $r_c$                   |         the radius of drone in idealized condition.          |
+| $vs_{j,t} $             |    the spread rate of fire near the location indexed $j$     |
+| $p_{j,t}$               | The probability for drones to detect fire location $j$ in time $t$ |
+|                         |                                                              |
+|                         |                                                              |
 
 ## Fast Response Model
 
-### Data Pre-processing (JXB)
+To discuss the possible deployment of drones in order to detect fire and transmit the signal to EOC, we design Fast Response Model to maximize coverage and minimize the cost. To represent the fire distribution, fire frequency and fire size, we come up with several well-designed indices and use fire location in certain period to represent those factors with minimum lost of information.  Since it's not economically efficient to cover all the land of Victoria because the drones are able to move and the fact that fire can spread and then be detected, we use weighted covering lost(WCL) to represent the cost for not covering all the possible locations of fire. We use the data in 2020 for case study, but the strategy we adapt and the data we compute is generic and can be used in various situation. After sensitivity test, we proved the robustness of the model. It can be showed that the Fast Response Model can be used in different size of fire, different frequency of fire, and different distribution of fire in state of Victoria and other places in the world.
 
-### Clustering (JXB)
+### Data Pre-processing (RH)
+
+For the sake of CFA, our model should only be considering the fire situation within the range of state of Victoria. The data we obtained from NASA database is contains noise and locations out of border. The first step of data pre-processing is meant to sift out all the illegal point with criteria mentioned above. Considering the spatial location of noise point, we use DBSCAN clustering with ball tree[https://en.wikipedia.org/wiki/Ball_tree] algorithm, and is implemented by sci-learn project[https://scikit-learn.org/stable/about.html#citing-scikit-learn]. Since the data contains latitude and longitude, to define the distance function for clustering one need to use the haversine formula["http://www.movable-type.co.uk/scripts/latlong.html"] to calculate the great-circle distance between two points.
+$$
+dist=2\cdot R_{e} \cdot \arctan (\sqrt{\frac {\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
+\cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} })}
+{1-(\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _1\cdot 
+\cos \varphi _2 \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} }))}})
+$$
+This ensures the correctness of clustering.
+
+To define a noise point which is inefficient to cover it, we define two variables $eps$ and $minPoints$​ according to DBSCAN conventions. 
+
+To more easily obtain the optimized value, we first normalize data with standard normalization, then we set 
+$$
+\left\{
+\begin{array}{**lr**}
+eps=0.15&  \\  
+minPoints=8
+\end{array}  
+\right.
+$$
+
+![img](https://s2.loli.net/2022/02/11/FZf6Jrldk4aB8Hv.png)
+
+### Clustering 
+
+To deploy drones in a way that reaches the target of fast response, we first need to quantify the target using one index, which we define it as weighted covering lost(WCL).
+$$
+WCL=\sum_j \int _{t0} ^{t1}  { (dis_{j,t}-r_c)^2\cdot p_{j,t}} \cdot vs_{j,t} \ \ dt
+$$
+The models contain the following perpectives:
+
+* This model considers time when fire can be detected by satellites $t_0$, meaning it appears on our data at the first time until the time 
+
+  * 
+
+  * $t_1$ represents 
+
+* $dis_{j,t}$ represents 
+
+* $r_c$ represents the radius of drone in idealized condition.
+
+* $vs_{j,t} $ represents the spread rate of fire near the location indexed $j$
+
+* $p_{j,t}$ represents the 
 
 ### In-Cluster Processing(RH)
 

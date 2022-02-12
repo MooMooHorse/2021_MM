@@ -317,14 +317,68 @@ All mentioned operations are based on Python's framework Pandas.
 
 Australian Bureau of Statistics offers digital boundary files of all states. By reading the shape file and monthly wild-fire data in MATLAB R2021b, it's easy to use filterm function to drop all data points out of the state Victoria, and map all points to a 109x185 matrix, where 20 terms in each dimension corresponding to one degree in geography.
 
-The Heatmap function can build maps in an intuitive and easily machine-learned form. By building maps for every month in 17 years, 204 maps are obtained. The figure below shows the wild fire in Victoria in January of 2003.![modis_2003_1_Australia](https://s2.loli.net/2022/02/12/yXLwnJeVq89QAG3.png)
+The Heatmap function can build maps in an intuitive and easily machine-learned form. By building maps for every month in 17 years, 204 maps are obtained. The figure below shows the wild fire in Victoria in 2003.
+
+![modis_2003_1_Australia](Core/figures/modis_2003_1_Australia.png)
+
+![modis_2003_2_Australia](Core/figures/modis_2003_2_Australia.png)
+
+![modis_2003_3_Australia](Core/figures/modis_2003_3_Australia.png)
+
+![modis_2003_4_Australia](Core/figures/modis_2003_4_Australia.png)
+
+![modis_2003_5_Australia](Core/figures/modis_2003_5_Australia.png)
+
+![modis_2003_6_Australia](Core/figures/modis_2003_6_Australia.png)
+
+![modis_2003_7_Australia](Core/figures/modis_2003_7_Australia.png)
+
+![modis_2003_8_Australia](Core/figures/modis_2003_8_Australia.png)
+
+![modis_2003_9_Australia](Core/figures/modis_2003_9_Australia.png)
+
+![modis_2003_10_Australia](Core/figures/modis_2003_10_Australia.png)
+
+![modis_2003_11_Australia](Core/figures/modis_2003_11_Australia.png)
+
+![modis_2003_12_Australia](Core/figures/modis_2003_12_Australia.png)
 
 The RGB channel values in the picture are given by the following formula:
 $$
 \begin{equation}
-
+R_{x,y}=\left\{
+\begin{array}{**lr**}
+\left \lfloor 255\frac{3\root4\of{{heat}_{x,y}}}{\max(\root4\of {heat})} \right \rfloor & \root4\of{{heat}_{x,y}}<\frac{1}{3}\max(\root4\of {heat})  \\  
+255 & \root4\of{{heat}_{x,y}}\ge\frac{1}{3}\max(\root4\of {heat})
+\end{array}  
+\right.
 \end{equation}
 $$
+
+$$
+\begin{equation}
+G_{x,y}=\left\{
+\begin{array}{**lr**}
+0&\root4\of{{heat}_{x,y}}\le\frac{1}{3}\max(\root4\of {heat})\\
+\left \lfloor 255\big(\frac{3\root4\of{{heat}_{x,y}}}{\max(\root4\of {heat})}-1\big) \right \rfloor&\frac{1}{3}\max(\root4\of {heat})<\root4\of{{heat}_{x,y}}<\frac{2}{3}\max(\root4\of {heat})  \\  
+255&\root4\of{{heat}_{x,y}}\ge\frac{2}{3}\max(\root4\of {heat})
+\end{array}  
+\right.
+\end{equation}
+$$
+
+$$
+\begin{equation}
+B_{x,y}=\left\{
+\begin{array}{**lr**}
+0&\root4\of{{heat}_{x,y}}<\frac{2}{3}\max(\root4\of {heat})\\
+\left \lfloor 255\big(\frac{3\root4\of{{heat}_{x,y}}}{\max(\root4\of {heat})}-2\big) \right \rfloor&\root4\of{{heat}_{x,y}}\ge\frac{2}{3}\max(\root4\of {heat})  
+\end{array}  
+\right.
+\end{equation}
+$$
+
+
 
 ### Time series construction
 
@@ -390,7 +444,7 @@ $$
 
 The symbol meaning in the formula is the same as that in LSTM. The full connection of input variables is replaced by convolution operation. According to the internal structure of ConvLSTM in figure, it can be seen that input gate, output gate and forgetting gate all carry out convolution operation for input and hidden layer.
 
-![image-20220211203954162](https://s2.loli.net/2022/02/11/LRnaVqQxbZtSv29.jpg)
+![Structure_of_ConvLSTM_Cell](Core/figures/Structure_of_ConvLSTM_Cell.jpg)
 
 $\mathbfit{W}_{ci}\circ\mathbfit{C}_{t-1}$, $\mathbfit{W}_{cf}\circ\mathbfit{C}_{t-1}$ and $\mathbfit{W}_{co}\circ\mathbfit{C}_{t-1}$ in the formula indicate that the input, output and forgetting gates are connected to the Peephole(Gers et al., 2000) of the previous cellular state. As shown in the figure, the Peephole connection adds cell state information to each gate. Since the unit may have a door state of 0, which results in a lack of important information, adding the Peephole operation can improve this shortcoming.
 

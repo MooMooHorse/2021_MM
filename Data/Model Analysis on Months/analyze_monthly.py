@@ -60,7 +60,8 @@ def Clustering(lat,lon):
     MEAN=0
     if n_clusters_:
         MEAN=int(np.floor((len(X)-n_noise_)/n_clusters_))
-
+    if year==2011 and month ==4 :
+        print(len(X))
     return len(X),n_clusters_,MEAN
     # print("Estimated number of noise points: %d" % n_noise_)
     # print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(X, labels))
@@ -123,12 +124,12 @@ Col0=[]
 Col1=[]
 Col2=[]
 Col3=[]
-for year in range(2010,2021):
+for year in range(2010,2013):
     for month in range(1,13):
         df=pd.read_csv("FMonthly/modis_"+str(year)+"_"+str(month)+"_Australia.csv")
         FI=[0,0,0]
         if len(df["latout"]):
-            FI=Clustering(df["latout"],df["lonout"])
+            FI=Clustering(df["latout"],df["lonout"],year,month)
         Col0.append(str(year)+"/"+str(month))
         Col1.append(FI[0])
         Col2.append(FI[1])

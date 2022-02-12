@@ -68,7 +68,7 @@ def Calc_Cost(tree_edges):
         # print(ceil(w))
     return cost
 
-def K_Mean_Clustering(lat,lon):
+def K_Mean_Clustering(lat,lon,year,month):
     import numpy as np
 
     from sklearn.cluster import DBSCAN,k_means
@@ -82,6 +82,7 @@ def K_Mean_Clustering(lat,lon):
     tWCL=902
     for cluster_num in range(1,30):
         db =  k_means(X,n_clusters=cluster_num)
+
 
         Center=db[0]
         labels = db[1]
@@ -108,6 +109,8 @@ def K_Mean_Clustering(lat,lon):
         
         if WCL/len(X)**2 < tWCL:
             return WCL/len(X)**2,cluster_num,cost,cost+cluster_num
+        
+    print(year,month)
 
     # print(WCL/len(X)**2)
 
@@ -123,7 +126,7 @@ for year in range(2010,2021):
         EI=[0,0,0]
 
         if len(df["latout"]):
-            EI=K_Mean_Clustering(df["latout"].to_list(),df["lonout"].to_list())
+            EI=K_Mean_Clustering(df["latout"].to_list(),df["lonout"].to_list(),year,month)
 
         if EI==None:
             EI=[0,0,0]

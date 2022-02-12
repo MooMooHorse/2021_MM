@@ -1,6 +1,5 @@
 % The Models
 \documentclass[../main]{subfiles}
-
 \graphicspath{{figures/}{../figures/}}
 
 \begin{document}
@@ -324,12 +323,11 @@ maps are obtained. The figure below shows the wild fire in Victoria in
   \begin{subfigure}[b]{0.25\linewidth}
   \includegraphics[width=\linewidth]{modis_2003_12_Australia.png}
   \end{subfigure}
-\caption{good}
+\caption{Wild Fire in Victoria in Year 2003}
   \label{fig:1-12}
 \end{figure}
 The RGB channel values in the picture are given by the following
 formula:
-
 \begin{equation}
 R_{x,y}=\left\{
 \begin{array}{lr}
@@ -338,7 +336,6 @@ R_{x,y}=\left\{
 \end{array}  
 \right.
 \end{equation}
-
 \begin{equation}
 G_{x,y}=\left\{
 \begin{array}{lr}
@@ -348,7 +345,6 @@ G_{x,y}=\left\{
 \end{array}  
 \right.
 \end{equation}
-
 \begin{equation}
 B_{x,y}=\left\{
 \begin{array}{lr}
@@ -357,10 +353,17 @@ B_{x,y}=\left\{
 \end{array}  
 \right.
 \end{equation}
-
 \hypertarget{time-series-construction}{%
 \subsubsection{Time series
 construction}\label{time-series-construction}}
+
+After removing the white edges around the image, 204 images are read into Python and constructed into a five-dimensional tensor
+with size (192,12,3,185,109). 204-12=192 time steps are saved in the tensor, and each time step contains 12 batches with 3 channels, 
+185 of pixel in width and 109 in height.In this paper, the sliding window method\cite{7785326} was used to divide the MODIS 
+data used in the study into the input and output sets of supervised training. In terms of time, the input sequence length is 12 images 
+of one-year sequential data, the output sequence length is 1 image of sequential data in the next month, and the sliding step length is 
+one image in one month. For example, the data of 2003 is the input, the data of January 2004 is the output, the input of the next sliding 
+window is the data of February 2003 to January 2004, the output is the data of February 2004, and so on to the last year of the sequence.
 
 \hypertarget{convlstm}{%
 \subsubsection{ConvLSTM}\label{convlstm}}
@@ -378,23 +381,18 @@ forgetting gate are added to control the input and output of data of
 this unit (an LSTM cell is a basic unit) and the increase and decrease
 of the output information of the previous unit respectively. The LSTM
 formula is expressed as follows:
-
 \begin{equation}
 \mathbf{i}_t=\sigma(\mathbf{W}_{xi}\mathbf{X}_{t}+\mathbf{W}_{hi}\mathbf{H}_{t-1}+\mathbf{W}_{ci}\circ\mathbf{C}_{t-1}+b_i)
 \end{equation}
-
 \begin{equation}
 \mathbf{f}_t=\sigma(\mathbf{W}_{xf}\mathbf{X}_{t}+\mathbf{W}_{hf}\mathbf{H}_{t-1}+\mathbf{W}_{cf}\circ\mathbf{C}_{t-1}+b_f) 
 \end{equation}
-
 \begin{equation}
 \mathbf{C}_t=\mathbf{f}_{t}\circ\mathbf{C}_{t-1}+\mathbf{i}_t\circ\tanh(\mathbf{W}_{xc}\mathbf{X}_{t}+\mathbf{W}_{hc}\mathbf{H}_{t-1}+b_c)
 \end{equation}
-
 \begin{equation}
 \mathbf{o}_t=\sigma(\mathbf{W}_{xo}\mathbf{X}_{t}+\mathbf{W}_{ho}\mathbf{H}_{t-1}+\mathbf{W}_{co}\circ\mathbf{C}_{t-1}+b_o)
 \end{equation}
-
 ConvLSTM is a variant of LSTM proposed on the basis of LSTM. It replaces
 the fully connected state between the input layer and the hidden layer
 and between the hidden layer and the hidden layer of LSTM with the
@@ -405,33 +403,27 @@ spatial structure information of original image data. Compared with LSTM
 model,Conv LSTM can better extract spatial and temporal structure
 information from time series images. ConvLSTM model formula is expressed
 as follows:
-
 \begin{equation}
 \mathbf{i}_t=\sigma(\mathbf{W}_{xi}*\mathbf{X}_{t}+\mathbf{W}_{hi}*\mathbf{H}_{t-1}+\mathbf{W}_{ci}\circ\mathbf{C}_{t-1}+b_i)
 \end{equation}
-
 \begin{equation}
 \mathbf{f}_t=\sigma(\mathbf{W}_{xf}*\mathbf{X}_{t}+\mathbf{W}_{hf}*\mathbf{H}_{t-1}+\mathbf{W}_{cf}\circ\mathbf{C}_{t-1}+b_f) 
 \end{equation}
-
 \begin{equation}
 \mathbf{C}_t=\mathbf{f}_{t}\circ\mathbf{C}_{t-1}+\mathbf{i}_t\circ\tanh(\mathbf{W}_{xc}*\mathbf{X}_{t}+\mathbf{W}_{hc}*\mathbf{H}_{t-1}+b_c)
 \end{equation}
-
 \begin{equation}
 \mathbf{o}_t=\sigma(\mathbf{W}_{xo}*\mathbf{X}_{t}+\mathbf{W}_{ho}*\mathbf{H}_{t-1}+\mathbf{W}_{co}\circ\mathbf{C}_{t-1}+b_o)
 \end{equation}
-
 The symbol meaning in the formula is the same as that in LSTM. The full
 connection of input variables is replaced by convolution operation.
 According to the internal structure of ConvLSTM in figure, it can be
 seen that input gate, output gate and forgetting gate all carry out
 convolution operation for input and hidden layer.
-
-\begin{figure}
+\begin{figure}[h!]
 \centering
-\includegraphics[width=\linewidth]{Structure_of_ConvLSTM_Cell.jpg}
-\caption{}
+\includegraphics[width=0.7\linewidth]{Structure_of_ConvLSTM_Cell.jpg}
+\caption{Structure of ConvLSTM Cell}
 \end{figure}
 
 \(\mathbf{W}_{ci}\circ\mathbf{C}_{t-1}\),
@@ -441,13 +433,23 @@ that the input, output and forgetting gates are connected to the
 Peephole\cite{861302} of the previous cellular state. As shown in
 the figure, the Peephole connection adds cell state information to each
 gate. Since the unit may have a door state of 0, which results in a lack
-of important information, adding the Peephole operation can improve this
+of important information, adding the Peephole operation can cover this
 shortcoming.
 
 Based on the deep learning framework Pytorch, the ConvLSTM is
 constructed using Python language, and the experimental equipment
 environment is NVIDIA GeForce GTX1080 GPU.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{Structure_of_ConvLSTM_Network.jpg}
+  \caption{Structure of ConvLSTM Network}
+  \end{figure}
 
+  For the same prediction accuracy, the larger the convolution kernel is, 
+  the higher the spatial resolution of the required image data is. 
+  MODIS data are of low resolution, so the convolution kernel used in this paper is 3×3. In the experiment,
+   the Batch Size was set to 12, the optimizer was Adam, the loss function was the mean square loss function, 
+   the learning rate was set to 0.001, and the training epoch was 200.
 \hypertarget{model-fitting}{%
 \subsubsection{Model Fitting}\label{model-fitting}}
 

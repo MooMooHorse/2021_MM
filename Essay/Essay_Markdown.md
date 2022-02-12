@@ -62,6 +62,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 * We use one year data in Victoria with data provided by Earth Data to represent the general cases in Australia. However, our model to this case adapt to arbitrary cases, so it's without losing generality.
 * We assume once the fire is within the detective range of drones, it will be found out without delay.
 * We assume the spread rate of fire is stable and at a certain value, which is not the case in real world, but one can use the original formulae given in the model to simply modify the model.
+* The fire distribution, size and frequency is statistically evaluated in low dimensional indices. The deployment strategy, however, is linked to the exact fire location. Lowering dimension is better for visualization and model evaluation, yet will cause certain error.  We think the errors that are generated are acceptable and irrelevent to model optimization. 
 * Only 20 years of data is used for machine learning, the error produced is within the acceptable range.
 * The terrain situation can be more complicated in real world, we idealize mountain and other barriers as parabolic-like object.
 
@@ -114,6 +115,8 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 To discuss the possible deployment of drones in order to detect fire and transmit the signal to EOC, we design Fast Response Model to maximize coverage and minimize the cost. To represent the fire distribution, fire frequency and fire size, we come up with several well-designed indices and use fire location in certain period to represent those factors with minimum lost of information.  Since it's not economically efficient to cover all the land of Victoria because the drones are able to move and the fact that fire can spread and then be detected, we use weighted covering lost(WCL) to represent the cost for not covering all the possible locations of fire. We use the data in 2020 for case study, but the strategy we adapt and the data we compute is generic and can be used in various situation. 
 
 After sensitivity test, we proved the robustness of the model. It can be showed that the Fast Response Model can be used in different size of fire, different frequency of fire, and different distribution of fire in state of Victoria and other places in the world.
+
+
 
 ### Data Pre-processing (RH)
 
@@ -260,13 +263,42 @@ year={2014}
 
 
 
-![image-20220211232448402](C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png)
+<img src="C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png" alt="image-20220211232448402" style="zoom:67%;" />
 
 
 
 Because of the introduction of $trf_e$ and the use of divide and conquer strategy, the outcome is not only stable but also efficient as shown. 
 
 ![two_type](https://s2.loli.net/2022/02/11/7btwWVF2Bv1ZPhg.png)
+
+### Assessment of Model
+
+To assess the model in different circumstances, $WCL$ is no sufficient since it can only represent the efficiency of our deployment strategy of one certain fire location distribution. We can, however, use merely $WCL$ to optimize deployment strategy since our model is generic in any circumstances. But to further investigate how our model performs in those circumstances, giving a quantitive and statistic evaluation to our model. We have to set other indices, to reflect the size of fire and frequency of fire and to give a general description on fire distribution. However, it should be noted that deployment strategy depends on specific distribution of fire locations, transforming locations to lower dimensional indices will generate loss of information, whereas using low dimensional indices is valuable since it can help us evaluate model in a simple way, although with acceptable error.
+
+* To evaluate fire locations
+
+  * We choose month as our sample interval, meaning that we sample the data for the last month every month.
+
+  * The first index $nFI$ is the number of fire locations in the month.
+
+  * The second index $nCFI$ is the number of fire location cluster in the month
+
+  * The third index $nCMSFI$ is the mean of size of cluster of fire location in the month
+
+  * Fire index vector $FIV=(nFI,nCFI,nCMSFI)$ can accurately reflect the fire size, distribution and frequency.
+
+* To evaluate FA model efficiency
+
+  * We set $\frac {tWCL} {nFI^2}$ to certain Value, which is $902.223$, obtained by using data for 2020
+  * The firsts index is $nSSA$ which is the number of SSAs
+  * The second index is $nRep$ which is the number of repeaters
+  * The third index is $nDrones$ which is the number of total drones.
+
+We statistically gather the data for every month from 2010 to 2020, and we want to analyse the relationship between the fire location indices and model efficiency indices. To simplify our model and to improve the effect of visualization, we first use PCA to obtain the principle component of $FIV$, $cFIV$. Then we plot $cFIV$ against $nSSA$,$nRep$,$nDrones$ respectively.
+
+
+
+### Sensitivity Analysis
 
 ## Fire Prediction Model
 
@@ -375,6 +407,72 @@ Hochreiter S and Schmidhuber J .1997.Long Short-Term Memory. Neural computation,
 Gers F A and Schmidhuber J.2000. Recurrent nets that time and count. Proceedings of the IEEE-INNS-ENNS International Joint Conference on Neural Networks, 3:189 -194.[DOI:10.1109/IJCNN.2000.861302]
 ## Pearl and Spur Model
 
-### Pearl Model (TBD)
+### Pearl Model 
 
-### Spur Model (TBD)
+2019, Victoria, Australia suffered a severe bushfire. On 1th January, houses were burned to the groung as NSW fire spread to Corryong in the northern   Victoria. Corryong, the town which is surrounded by Mount Mitta and Wabba Wilderness Park was in great in danger. 
+
+In order to determine our model for optimizing the locations of hovering VHF/UHF radio-repeater drones for fires of different sizes on different terrains, we need to consider various terrains, including hills, plain and mountains. Corryong, the city lying in the basin, is perfect for our optimization. Therefore, we will take Corryong for an ecxample to explain our location strategy.
+
+
+
+We assume the fire is happening in the area surrounded by the red circle, the area is much larger than the drones hovering range. Our basic strategy is to supervise the edge of the bushfire area. Therefore , we will need the "Boots-on-the-ground” Forward Teams be at the front lines of the fire events carrying the VHF/UHF. Conisdering various situations, there is always no definitely perfect strategy to guide the teams to distribute. Thus, we consider all random situations for the distribution of the firefighters.
+
+<img src="/Users/a966/Downloads/截屏2022-02-11 22.37.04.png" alt="截屏2022-02-11 22.37.04" style="zoom:50%;" />
+
+​																			Hypothetical bush fire area happening in the Corryong
+
+Based on the bushfire area, we can get a latitude function along the periphery of the enclosed area, which is shown as below.
+
+<img src="https://s2.loli.net/2022/02/11/1btMZUgaDKFqpf6.png" alt="截屏2022-02-11 22.49.10" style="zoom:50%;" />
+
+This function has a x-axis which represents the distance along the periphery of the area from certain point, and a y-axis which represents the latitudes of the point. Considering the effect of latitude is significant to the height of drones should be, so that they avoid the signal loss caused by terrains as possible as they can.
+
+We choose to use the Monte-Carlo algorithm to analyze the effect of firefighters' distribution to the locations of the hovering drones. For the first step, we will distribute some fire fighter at the front line of the bushfire area for simulation. Below is one condition considered.
+
+<img src="https://s2.loli.net/2022/02/11/KvTXJhZqfCS1RHA.png" alt="截屏2022-02-11 23.02.14" style="zoom:50%;" />
+
+​									              Green points represent forward teammenbersteammembers carrying VHF/UHF (9 firefighters in simulation)
+
+From the results provided by the Google earth pro, we obtain the function of the distance along the periphery and the latitude
+$$
+\begin{equation}
+H(x_i)
+\end{equation}
+$$
+Drones' locations strategy explanation
+
+There are some basic principles we need to follow to settle the drones
+
+1. The distance of two drones can't be over 20 km, which is maximum range that transceivers can spread and receive.
+2. Every individual fire fighter must be received by at least one drone so that they can keep connected.
+3. Drones should be settled along the periphery of the bushfire area.
+4. Drones should be in the reasonable height so that the radio signal won't be interrupted by the terrain obstacles, for example hills between.
+
+Therefore we have the drones' settling strattegy as below
+
+<img src="https://s2.loli.net/2022/02/12/iKl2UhN5FJLxytz.png" alt="截屏2022-02-12 13.58.51" style="zoom:33%;" />
+
+​																							mindmap of drones strategy
+
+
+$$
+\begin{equation}
+sdist=
+\end{equation}
+$$
+$x_i$ means the location along the periphery; $d_i$ represents the distance required along the periphery that makes the point $x_{i-1}$ moving forward for  20km in the actual distance; sigma is the factor which make drones get closer to the previous one due to the terrain.
+
+After these analysis, we can get the distribution of the drones:
+
+<img src="/Users/a966/Downloads/截屏2022-02-12 14.59.19.png" alt="截屏2022-02-12 14.59.19" style="zoom:50%;" />
+
+​															 Blue circles and lines show the radio range of the transceivers on the drones
+
+Drones' location strategy common derivation
+
+Above is a specific situation of the distribution of the drones, in more common situations, the distribution of  drones is related to the terrain and distribution of the fire fighters.
+
+
+
+>  minimum spanning tree
+

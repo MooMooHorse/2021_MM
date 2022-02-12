@@ -62,6 +62,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 * We use one year data in Victoria with data provided by Earth Data to represent the general cases in Australia. However, our model to this case adapt to arbitrary cases, so it's without losing generality.
 * We assume once the fire is within the detective range of drones, it will be found out without delay.
 * We assume the spread rate of fire is stable and at a certain value, which is not the case in real world, but one can use the original formulae given in the model to simply modify the model.
+* The fire distribution, size and frequency is statistically evaluated in low dimensional indices. The deployment strategy, however, is linked to the exact fire location. Lowering dimension is better for visualization and model evaluation, yet will cause certain error.  We think the errors that are generated are acceptable and irrelevent to model optimization. 
 * Only 20 years of data is used for machine learning, the error produced is within the acceptable range.
 * The terrain situation can be more complicated in real world, we idealize mountain and other barriers as parabolic-like object.
 
@@ -262,13 +263,42 @@ year={2014}
 
 
 
-![image-20220211232448402](C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png)
+<img src="C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png" alt="image-20220211232448402" style="zoom:67%;" />
 
 
 
 Because of the introduction of $trf_e$ and the use of divide and conquer strategy, the outcome is not only stable but also efficient as shown. 
 
 ![two_type](https://s2.loli.net/2022/02/11/7btwWVF2Bv1ZPhg.png)
+
+### Assessment of Model
+
+To assess the model in different circumstances, $WCL$ is no sufficient since it can only represent the efficiency of our deployment strategy of one certain fire location distribution. We can, however, use merely $WCL$ to optimize deployment strategy since our model is generic in any circumstances. But to further investigate how our model performs in those circumstances, giving a quantitive and statistic evaluation to our model. We have to set other indices, to reflect the size of fire and frequency of fire and to give a general description on fire distribution. However, it should be noted that deployment strategy depends on specific distribution of fire locations, transforming locations to lower dimensional indices will generate loss of information, whereas using low dimensional indices is valuable since it can help us evaluate model in a simple way, although with acceptable error.
+
+* To evaluate fire locations
+
+  * We choose month as our sample interval, meaning that we sample the data for the last month every month.
+
+  * The first index $nFI$ is the number of fire locations in the month.
+
+  * The second index $nCFI$ is the number of fire location cluster in the month
+
+  * The third index $nCMSFI$ is the mean of size of cluster of fire location in the month
+
+  * Fire index vector $FIV=(nFI,nCFI,nCMSFI)$ can accurately reflect the fire size, distribution and frequency.
+
+* To evaluate FA model efficiency
+
+  * We set $\frac {tWCL} {nFI^2}$ to certain Value, which is $902.223$, obtained by using data for 2020
+  * The firsts index is $nSSA$ which is the number of SSAs
+  * The second index is $nRep$ which is the number of repeaters
+  * The third index is $nDrones$ which is the number of total drones.
+
+We statistically gather the data for every month from 2010 to 2020, and we want to analyse the relationship between the fire location indices and model efficiency indices. To simplify our model and to improve the effect of visualization, we first use PCA to obtain the principle component of $FIV$, $cFIV$. Then we plot $cFIV$ against $nSSA$,$nRep$,$nDrones$ respectively.
+
+
+
+### Sensitivity Analysis
 
 ## Fire Prediction Model
 

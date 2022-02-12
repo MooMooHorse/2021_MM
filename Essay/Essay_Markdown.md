@@ -305,10 +305,30 @@ We statistically gather the data for every month from 2010 to 2020, and we want 
 ### Data Pre-processing
 
 The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format. The task is to drop all data with confidence less than 80, and divide them monthly. A high threshold for confidence is adopted to reduce the noise of input data and make the prediction result more reliable. Given the intensity of wildfires, it makes sense to combine data from the same month to create heat maps. All mentioned operations are based on Pandas in Python.
+The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format. The task is to drop all data with confidence less than 80, and divide them monthly. A high threshold for confidence is adopted to reduce the noise of input data and make the prediction result more reliable. There are two main reasons for selecting monthly divided data: 
+
+1. Monthly divided data has a long time span, which can provide a long enough time series. 
+
+2. Monthly divided data has uniform time interval, which is convenient for statistical modeling of time series. 
+
+All mentioned operations are based on Python's framework Pandas.
 
 ### Build Map with Fire Index
 
+Australian Bureau of Statistics offers digital boundary files of all states. By reading the shape file and monthly wild-fire data in MATLAB R2021b, it's easy to use filterm function to drop all data points out of the state Victoria, and map all points to a 109x185 matrix, where 20 terms in each dimension corresponding to one degree in geography.
+
+The Heatmap function can build maps in an intuitive and easily machine-learned form. By building maps for every month in 17 years, 204 maps are obtained. The figure below shows the wild fire in Victoria in January of 2003.![modis_2003_1_Australia](https://s2.loli.net/2022/02/12/yXLwnJeVq89QAG3.png)
+
+The RGB channel values in the picture are given by the following formula:
+$$
+\begin{equation}
+
+\end{equation}
+$$
+
 ### Time series construction
+
+
 
 ### ConvLSTM
 

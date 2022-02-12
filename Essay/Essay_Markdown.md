@@ -197,7 +197,7 @@ Given the fire location distribution, we plot the SSA's location as follow. The 
 
 ![img](https://s2.loli.net/2022/02/11/Ck7X2wBuEnJVUtW.png)
 
-### Deploy Repeaters
+### Deploy Repeaters1
 
 The second part of Fast Response Model is connecting all the SSAs using the least repeaters. We solve this problem by divide and conquer and with the help of minimum spanning tree. 
 

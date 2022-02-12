@@ -235,4 +235,129 @@ spanning tree.
 Because of the introduction of \(trf_e\) and the use of divide and
 conquer strategy, the outcome is not only stable but also efficient as
 shown.
+
+
+\subsection{Pearl and Spur Model}
+\subsubsection{Pearl Model}
+
+2019, Victoria, Australia suffered a severe bushfire. On 1th January,
+houses were burned to the groung as NSW fire spread to Corryong in the
+northern Victoria. Corryong, the town which is surrounded by Mount Mitta
+and Wabba Wilderness Park was in great in danger.
+
+In order to determine our model for optimizing the locations of hovering
+VHF/UHF radio-repeater drones for fires of different sizes on different
+terrains, we need to consider various terrains, including hills, plain
+and mountains. Corryong, the city lying in the basin, is perfect for our
+optimization. Therefore, we will take Corryong for an ecxample to
+explain our location strategy.
+
+We assume the fire is happening in the area surrounded by the red
+circle, the area is much larger than the drones hovering range. Our
+basic strategy is to supervise the edge of the bushfire area. Therefore
+, we will need the "Boots-on-the-ground'' Forward Teams be at the front
+lines of the fire events carrying the VHF/UHF. Conisdering various
+situations, there is always no definitely perfect strategy to guide the
+teams to distribute. Thus, we consider all random situations for the
+distribution of the firefighters.
+
+\begin{figure}[h!]
+      \centering
+      \includegraphics[width=.5\linewidth]{terrain.png}
+      \caption{Hypothetical bush fire area happening in the Corryong}
+    \end{figure}
+
+Based on the bushfire area, we can get a latitude function along the
+periphery of the enclosed area, which is shown as below.
+\begin{figure}[h!]
+      \centering
+      \captionsetup{justification=centering}
+      \includegraphics[width=\linewidth]{latitude.png}
+      \caption{latitude along the peripher}
+      \end{figure}
+    
+This function has a x-axis which represents the distance along the
+periphery of the area from certain point, and a y-axis which represents
+the latitudes of the point. Considering the effect of latitude is
+significant to the height of drones should be, so that they avoid the
+signal loss caused by terrains as possible as they can.
+
+We choose to use the Monte-Carlo algorithm to analyze the effect of
+firefighters' distribution to the locations of the hovering drones. For
+the first step, we will distribute some fire fighter at the front line
+of the bushfire area for simulation. Below is one condition considered.
+
+\begin{figure}[h!]
+      \centering
+      \captionsetup{justification=centering}
+      \includegraphics[width=.7\linewidth]{human_simulation.png}
+      \caption{Distribute fire fighters ramdomly}
+      \end{figure}
+      
+Green points represent fire fighters carrying VHF/UHF (9 firefighters in simulation)
+
+From the results provided by the Google earth pro, we obtain the
+function of the distance along the periphery and the latitude
+
+\begin{equation}
+H(x_i)
+\end{equation}
+
+\subsubsection{Drones' locations strategy explanation}
+
+There are some basic principles we need to follow to settle the drones
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  The distance of two drones can't be over 20 km, which is maximum range
+  that transceivers can spread and receive.
+\item
+  Every individual fire fighter must be received by at least one drone
+  so that they can keep connected.
+\item
+  Drones should be settled along the periphery of the bushfire area.
+\item
+  Drones should be in the reasonable height so that the radio signal
+  won't be interrupted by the terrain obstacles, for example hills
+  between.
+\end{enumerate}
+
+Therefore we have the drones' settling strattegy as below
+
+\begin{figure}[h!]
+      \centering
+      \captionsetup{justification=centering}
+      \includegraphics[width=.5\linewidth]{mindmap.png}
+      \caption{mindmap of drones strategy}
+      \end{figure}
+    
+\begin{equation}
+sdist=
+\end{equation}
+
+\(x_i\) means the location along the periphery; \(d_i\) represents the
+distance required along the periphery that makes the point \(x_{i-1}\)
+moving forward for 20km in the actual distance; sigma is the factor
+which make drones get closer to the previous one due to the terrain.
+
+After these analysis, we can get the distribution of the drones:
+
+\begin{figure}[h!]
+      \centering
+      \captionsetup{justification=centering}
+      \includegraphics[width=.7\linewidth]{drones.png}
+      \caption{Simulated distribution of drones \\ Blue circles show the radio range of the transceivers on the
+drones}
+      \end{figure}
+      
+Blue circles and lines show the radio range of the transceivers on the
+drones
+
+Drones' location strategy common derivation
+
+Above is a specific situation of the distribution of the drones, in more
+common situations, the distribution of drones is related to the terrain
+and distribution of the fire fighters.
+
 \end{document}

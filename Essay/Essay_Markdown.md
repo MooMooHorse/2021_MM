@@ -363,56 +363,72 @@ Hochreiter S and Schmidhuber J .1997.Long Short-Term Memory. Neural computation,
 Gers F A and Schmidhuber J.2000. Recurrent nets that time and count. Proceedings of the IEEE-INNS-ENNS International Joint Conference on Neural Networks, 3:189 -194.[DOI:10.1109/IJCNN.2000.861302]
 ## Pearl and Spur Model
 
-### Pearl Model (TBD)
-
-Background of the model
+### Pearl Model 
 
 2019, Victoria, Australia suffered a severe bushfire. On 1th January, houses were burned to the groung as NSW fire spread to Corryong in the northern   Victoria. Corryong, the town which is surrounded by Mount Mitta and Wabba Wilderness Park was in great in danger. 
 
 In order to determine our model for optimizing the locations of hovering VHF/UHF radio-repeater drones for fires of different sizes on different terrains, we need to consider various terrains, including hills, plain and mountains. Corryong, the city lying in the basin, is perfect for our optimization. Therefore, we will take Corryong for an ecxample to explain our location strategy.
 
-1. Huge bushfire area assupmtion
-
-   We assume the fire is happening in the area surrounded by the red circle, the area is much larger than the drones hovering range. Our basic strategy is to supervise the edge of the bushfire area. Therefore , we will need the "Boots-on-the-ground” Forward Teams be at the front lines of the fire events carrying the VHF/UHF. Conisdering various situations, there is always no definitely perfect strategy to guide the teams to distribute. Thus, we consider all random situations for the distribution of the firefighters.
-
-   ![截屏2022-02-11 22.37.04](/Users/a966/Downloads/截屏2022-02-11 22.37.04.png)
-
-   ​																			Hypothetical bush fire area happening in the Corryong
-
-   Based on the bushfire area, we can get a latitude function along the periphery of the enclosed area, which is shown as below.
-
-   ![截屏2022-02-11 22.49.10](https://s2.loli.net/2022/02/11/1btMZUgaDKFqpf6.png)
-
-   This function has a x-axis which represents the distance along the periphery of the area from certain point, and a y-axis which represents the latitudes of the point. Considering the effect of latitude is significant to the height of drones should be, so that they avoid the signal loss caused by terrains as possible as they can.
-
-   We choose to use the Monte-Carlo algorithm to analyzide the effect of firefighters' distribution to the locations of the hovering drones. For the first step, we will distribute some fire fighter at the front line of the bushfire area for simulation. Below is one condition considered.
-
-   ![截屏2022-02-11 23.02.14](https://s2.loli.net/2022/02/11/KvTXJhZqfCS1RHA.png)
-
-   ​									              Green points represent forward teammenbers carring VHF/UHF (9 firefighters in simulation)
-
-   
-
-2. Drones' locations strategy
-
-   There are some basic principles we need to follow to settle the drones
-
-   1. The distance of two drones can't be over 20 km, which is maximum range that transceivers can spread and receive.
-   2. Every individual fire fighter must be received by at least one drone so that they can keep connected.
-   3. Drones should be settled along the periphery of the bushfire area.
-   4. Drones should be in the reasonable height so that the radio signal won't be interrupted by the terrain obstacles, for example hills between.
-   5. asdf
-
-3. a s d f
-
-   
-
-   
 
 
+We assume the fire is happening in the area surrounded by the red circle, the area is much larger than the drones hovering range. Our basic strategy is to supervise the edge of the bushfire area. Therefore , we will need the "Boots-on-the-ground” Forward Teams be at the front lines of the fire events carrying the VHF/UHF. Conisdering various situations, there is always no definitely perfect strategy to guide the teams to distribute. Thus, we consider all random situations for the distribution of the firefighters.
+
+<img src="/Users/a966/Downloads/截屏2022-02-11 22.37.04.png" alt="截屏2022-02-11 22.37.04" style="zoom:50%;" />
+
+​																			Hypothetical bush fire area happening in the Corryong
+
+Based on the bushfire area, we can get a latitude function along the periphery of the enclosed area, which is shown as below.
+
+<img src="https://s2.loli.net/2022/02/11/1btMZUgaDKFqpf6.png" alt="截屏2022-02-11 22.49.10" style="zoom:50%;" />
+
+This function has a x-axis which represents the distance along the periphery of the area from certain point, and a y-axis which represents the latitudes of the point. Considering the effect of latitude is significant to the height of drones should be, so that they avoid the signal loss caused by terrains as possible as they can.
+
+We choose to use the Monte-Carlo algorithm to analyze the effect of firefighters' distribution to the locations of the hovering drones. For the first step, we will distribute some fire fighter at the front line of the bushfire area for simulation. Below is one condition considered.
+
+<img src="https://s2.loli.net/2022/02/11/KvTXJhZqfCS1RHA.png" alt="截屏2022-02-11 23.02.14" style="zoom:50%;" />
+
+​									              Green points represent forward teammenbersteammembers carrying VHF/UHF (9 firefighters in simulation)
+
+From the results provided by the Google earth pro, we obtain the function of the distance along the periphery and the latitude
+$$
+\begin{equation}
+H(x_i)
+\end{equation}
+$$
+Drones' locations strategy explanation
+
+There are some basic principles we need to follow to settle the drones
+
+1. The distance of two drones can't be over 20 km, which is maximum range that transceivers can spread and receive.
+2. Every individual fire fighter must be received by at least one drone so that they can keep connected.
+3. Drones should be settled along the periphery of the bushfire area.
+4. Drones should be in the reasonable height so that the radio signal won't be interrupted by the terrain obstacles, for example hills between.
+
+Therefore we have the drones' settling strattegy as below
+
+<img src="https://s2.loli.net/2022/02/12/iKl2UhN5FJLxytz.png" alt="截屏2022-02-12 13.58.51" style="zoom:33%;" />
+
+​																							mindmap of drones strategy
+
+
+$$
+\begin{equation}
+sdist=
+\end{equation}
+$$
+$x_i$ means the location along the periphery; $d_i$ represents the distance required along the periphery that makes the point $x_{i-1}$ moving forward for  20km in the actual distance; sigma is the factor which make drones get closer to the previous one due to the terrain.
+
+After these analysis, we can get the distribution of the drones:
+
+<img src="/Users/a966/Downloads/截屏2022-02-12 14.59.19.png" alt="截屏2022-02-12 14.59.19" style="zoom:50%;" />
+
+​															 Blue circles and lines show the radio range of the transceivers on the drones
+
+Drones' location strategy common derivation
+
+Above is a specific situation of the distribution of the drones, in more common situations, the distribution of  drones is related to the terrain and distribution of the fire fighters.
 
 
 
+>  minimum spanning tree
 
-
-### Spur Model (TBD) 

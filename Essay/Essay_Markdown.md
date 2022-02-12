@@ -62,6 +62,7 @@ Wildfire spreads rapidly in Australia. In fire season, it's devastating for peop
 * We use one year data in Victoria with data provided by Earth Data to represent the general cases in Australia. However, our model to this case adapt to arbitrary cases, so it's without losing generality.
 * We assume once the fire is within the detective range of drones, it will be found out without delay.
 * We assume the spread rate of fire is stable and at a certain value, which is not the case in real world, but one can use the original formulae given in the model to simply modify the model.
+* The fire distribution, size and frequency is statistically evaluated in low dimensional indices. The deployment strategy, however, is linked to the exact fire location. Lowering dimension is better for visualization and model evaluation, yet will cause certain error.  We think the errors that are generated are acceptable and irrelevent to model optimization. 
 * Only 20 years of data is used for machine learning, the error produced is within the acceptable range.
 * The terrain situation can be more complicated in real world, we idealize mountain and other barriers as parabolic-like object.
 
@@ -262,7 +263,7 @@ year={2014}
 
 
 
-![image-20220211232448402](C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png)
+<img src="C:\Users\86189\AppData\Roaming\Typora\typora-user-images\image-20220211232448402.png" alt="image-20220211232448402" style="zoom:67%;" />
 
 
 
@@ -270,15 +271,64 @@ Because of the introduction of $trf_e$ and the use of divide and conquer strateg
 
 ![two_type](https://s2.loli.net/2022/02/11/7btwWVF2Bv1ZPhg.png)
 
+### Assessment of Model
+
+To assess the model in different circumstances, $WCL$ is no sufficient since it can only represent the efficiency of our deployment strategy of one certain fire location distribution. We can, however, use merely $WCL$ to optimize deployment strategy since our model is generic in any circumstances. But to further investigate how our model performs in those circumstances, giving a quantitive and statistic evaluation to our model. We have to set other indices, to reflect the size of fire and frequency of fire and to give a general description on fire distribution. However, it should be noted that deployment strategy depends on specific distribution of fire locations, transforming locations to lower dimensional indices will generate loss of information, whereas using low dimensional indices is valuable since it can help us evaluate model in a simple way, although with acceptable error.
+
+* To evaluate fire locations
+
+  * We choose month as our sample interval, meaning that we sample the data for the last month every month.
+
+  * The first index $nFI$ is the number of fire locations in the month.
+
+  * The second index $nCFI$ is the number of fire location cluster in the month
+
+  * The third index $nCMSFI$ is the mean of size of cluster of fire location in the month
+
+  * Fire index vector $FIV=(nFI,nCFI,nCMSFI)$ can accurately reflect the fire size, distribution and frequency.
+
+* To evaluate FA model efficiency
+
+  * We set $\frac {tWCL} {nFI^2}$ to certain Value, which is $902.223$, obtained by using data for 2020
+  * The firsts index is $nSSA$ which is the number of SSAs
+  * The second index is $nRep$ which is the number of repeaters
+  * The third index is $nDrones$ which is the number of total drones.
+
+We statistically gather the data for every month from 2010 to 2020, and we want to analyse the relationship between the fire location indices and model efficiency indices. To simplify our model and to improve the effect of visualization, we first use PCA to obtain the principle component of $FIV$, $cFIV$. Then we plot $cFIV$ against $nSSA$,$nRep$,$nDrones$ respectively.
+
+
+
+### Sensitivity Analysis
+
 ## Fire Prediction Model
 
 ### Data Pre-processing
 
 The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format. The task is to drop all data with confidence less than 80, and divide them monthly. A high threshold for confidence is adopted to reduce the noise of input data and make the prediction result more reliable. Given the intensity of wildfires, it makes sense to combine data from the same month to create heat maps. All mentioned operations are based on Pandas in Python.
+The data source used in this task is from Moderate-resolution Imaging Spectroradiometer(MODIS) provided by NASA. The obtained time series data of Australia wild-fire from 2003 to 2020 is saved in CSV format. The task is to drop all data with confidence less than 80, and divide them monthly. A high threshold for confidence is adopted to reduce the noise of input data and make the prediction result more reliable. There are two main reasons for selecting monthly divided data: 
+
+1. Monthly divided data has a long time span, which can provide a long enough time series. 
+
+2. Monthly divided data has uniform time interval, which is convenient for statistical modeling of time series. 
+
+All mentioned operations are based on Python's framework Pandas.
 
 ### Build Map with Fire Index
 
+Australian Bureau of Statistics offers digital boundary files of all states. By reading the shape file and monthly wild-fire data in MATLAB R2021b, it's easy to use filterm function to drop all data points out of the state Victoria, and map all points to a 109x185 matrix, where 20 terms in each dimension corresponding to one degree in geography.
+
+The Heatmap function can build maps in an intuitive and easily machine-learned form. By building maps for every month in 17 years, 204 maps are obtained. The figure below shows the wild fire in Victoria in January of 2003.![modis_2003_1_Australia](https://s2.loli.net/2022/02/12/yXLwnJeVq89QAG3.png)
+
+The RGB channel values in the picture are given by the following formula:
+$$
+\begin{equation}
+
+\end{equation}
+$$
+
 ### Time series construction
+
+
 
 ### ConvLSTM
 

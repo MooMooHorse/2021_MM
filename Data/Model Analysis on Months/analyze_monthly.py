@@ -6,7 +6,7 @@ def init_map():
     from mpl_toolkits.basemap import Basemap
 
     m = Basemap(llcrnrlon=140.874088,llcrnrlat=-39.054526,urcrnrlon=151.567450,urcrnrlat=-33.122107,projection='mill',\
-                    resolution='l')
+                    resolution='i')
     m.drawcoastlines()
     m.drawcountries()
     m.drawstates()
@@ -123,8 +123,8 @@ Col0=[]
 Col1=[]
 Col2=[]
 Col3=[]
-for year in range(2010,2021):
-    for month in range(1,13):
+for year in range(2010,2011):
+    for month in range(1,2):
         df=pd.read_csv("FMonthly/modis_"+str(year)+"_"+str(month)+"_Australia.csv")
         FI=[0,0,0]
         if len(df["latout"]):

@@ -21,8 +21,6 @@ For the sake of CFA, our model should only be considering the fire situation wit
  Since the data contains latitude and longitude, 
  to define the distance function for clustering one need to use the haversine formula\cite{haversine} to calculate the great-circle distance between two points.
  
-
-
  \begin{equation}
       dist_{i,j}=2\cdot R_{e} \cdot \arctan \Bigg(\sqrt{\frac {\sin^2(\frac {\Delta \varphi_{lat} }{2})+\cos\varphi _i\cdot 
       \cos \varphi _j \cdot \sin^2({ \frac {\Delta \lambda_{lon}} {2} })}
@@ -106,20 +104,15 @@ investigation, but it can be adjusted according to real situation. It
 will be illustrated more thoroughly in the following section about
 sensitivity and robustness. We use modified \(k-means\) cluster to
 determine the positions of SSAs, which is described as follows
-
 \begin{figure}[h!]
       \includegraphics[width=\linewidth]{FlowChart2.png}
       \caption{deploy SSA flowchart}
       % \label{fig:boat1}
     \end{figure}
-
 This allows us to cluster the locations to their respective drones.
 k-means algorithm is used here since the \(sdist\) is positively
 correlates to distance. So the correctness of the algorithm can be
 ensured.
-
-
-
 \begin{figure}[h!]
       \centering
       \begin{subfigure}[b]{0.4\linewidth}
@@ -133,7 +126,6 @@ ensured.
       \caption{SSA and fire locations}
       \label{fig:coffee}
     \end{figure}
-
 Given the fire location distribution, we plot the SSA's location as
 above. The range is marked as well. It can be observed that the fire is
 frequent and in large scale at the east of state of Victoria. Our

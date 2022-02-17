@@ -15,14 +15,18 @@
 \usepackage{amsmath}
 \usepackage{subcaption}
 \usepackage{titlesec}
+\usepackage{setspace}
 
 \begin{document}
 
-\subfile{sections/abstract}
+\setlength{\parskip}{0.1\baselineskip}
+\begin{spacing}{1}
+  %%行间距变为double-space
+  \subfile{sections/abstract}
+\end{spacing} 
 
 
-
-
+\begin{spacing}{1}
 
 % Generate the Table of Contents if it's needed.
 \tableofcontents
@@ -133,7 +137,7 @@ at higher powers can help connect Emergency Operations Center (EOC) with SSA and
 
 
 \newpage
-
+\end{spacing} 
 \bibliographystyle{plain}
 \bibliography{../reference/reference}
 
